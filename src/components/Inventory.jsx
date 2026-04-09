@@ -4,44 +4,44 @@ import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle } from 'lucid
 import { CATEGORIES } from '../hooks/useInventory';
 import { ConfirmModal } from './ConfirmModal';
 
-export const ItemCard = ({ item, onUpdate, onDelete }) => {
+export const ItemRow = ({ item, onUpdate, onDelete }) => {
   const category = CATEGORIES.find(c => c.id === item.category) || CATEGORIES[CATEGORIES.length - 1];
 
   return (
     <motion.div 
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className="item-card glass"
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 10 }}
+      className="item-row"
     >
-      <div className="card-indicator" style={{ backgroundColor: category.color }}></div>
+      <div className="row-indicator" style={{ backgroundColor: category.color }}></div>
       
-      <div className="card-content">
-        <div className="card-info">
+      <div className="row-content">
+        <div className="row-info">
           <h3>{item.name}</h3>
-          <p className="category-label">{category.name}</p>
+          <span className="category-label">{category.name}</span>
         </div>
 
-        <div className="card-actions">
-          <div className="quantity-controls">
+        <div className="row-actions">
+          <div className="qty-minimal">
             <button 
               onClick={() => onUpdate(item.id, { quantity: Math.max(0, item.quantity - 1) })}
-              className="qty-btn"
+              className="qty-btn-mini"
             >
-              <Minus size={16} />
+              <Minus size={12} />
             </button>
-            <span className="quantity">{item.quantity}</span>
+            <span className="qty-val">{item.quantity}</span>
             <button 
               onClick={() => onUpdate(item.id, { quantity: item.quantity + 1 })}
-              className="qty-btn"
+              className="qty-btn-mini"
             >
-              <Plus size={16} />
+              <Plus size={12} />
             </button>
           </div>
           
           <button onClick={() => onDelete(item.id)} className="delete-btn">
-            <Trash2 size={18} />
+            <Trash2 size={16} />
           </button>
         </div>
       </div>
@@ -53,6 +53,14 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddingDrawer, setIsAddingDrawer] = useState(false);
   const [newDrawerName, setNewDrawerName] = useState('');
+  const [collapsedDrawers, setCollapsedDrawers] = useState({});
+
+  const toggleDrawer = (drawerName) => {
+    setCollapsedDrawers(prev => ({
+      ...prev,
+      [drawerName]: !prev[drawerName]
+    }));
+  };
 
   const groupedItems = items.reduce((acc, item) => {
     const drawer = item.location || 'Sans emplacement';
@@ -61,7 +69,8 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     return acc;
   }, {});
 
-  const handleDeleteDrawer = (drawerName) => {
+  const handleDeleteDrawer = (e, drawerName) => {
+    e.stopPropagation();
     const drawerItems = groupedItems[drawerName] || [];
     if (drawerItems.length > 0) {
       setDrawerToDelete(drawerName);
@@ -113,41 +122,49 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     <div className="inventory-list">
       {drawers.map((drawer) => {
         const drawerItems = groupedItems[drawer.name] || [];
+        const isCollapsed = collapsedDrawers[drawer.name];
+
         return (
           <div key={drawer.id || drawer.name} className="drawer-section">
-            <div className="drawer-header">
-              <div className="header-left">
-                <ChevronRight size={18} className="chevron" />
-                <h2>{drawer.name}</h2>
-                <span className="count">{drawerItems.length}</span>
-              </div>
-              <button 
-                className="delete-drawer-btn" 
-                onClick={() => handleDeleteDrawer(drawer.name)}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-            
-            <AnimatePresence mode="popLayout">
-              {drawerItems.map(item => (
-                <ItemCard 
-                  key={item.id} 
-                  item={item} 
-                  onUpdate={onUpdate} 
-                  onDelete={onDelete} 
-                />
-              ))}
-              {drawerItems.length === 0 && (
-                <motion.p 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 0.4 }} 
-                  className="empty-drawer-msg"
+            <div className="items-stack glass">
+              <div className="drawer-header" onClick={() => toggleDrawer(drawer.name)}>
+                <div className="header-left">
+                  <ChevronRight size={18} className={`chevron ${!isCollapsed ? 'open' : ''}`} />
+                  <h2>{drawer.name}</h2>
+                  <span className="count">{drawerItems.length}</span>
+                </div>
+                <button 
+                  className="delete-drawer-btn" 
+                  onClick={(e) => handleDeleteDrawer(e, drawer.name)}
                 >
-                  Ce tiroir est vide
-                </motion.p>
-              )}
-            </AnimatePresence>
+                  <Trash2 size={16} />
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {!isCollapsed && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="items-container"
+                  >
+                    {drawerItems.map(item => (
+                      <ItemRow 
+                        key={item.id} 
+                        item={item} 
+                        onUpdate={onUpdate} 
+                        onDelete={onDelete} 
+                      />
+                    ))}
+                    {drawerItems.length === 0 && (
+                      <p className="empty-drawer-msg">Ce tiroir est vide</p>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         );
       })}
