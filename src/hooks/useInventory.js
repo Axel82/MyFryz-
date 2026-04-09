@@ -132,6 +132,21 @@ export const useInventory = () => {
     }
   };
 
+  const updateDrawer = async (drawerId, newName, oldName) => {
+    if (familyId) {
+      // Update items first to avoid losing reference if we had FKs (though we don't strictly here)
+      await supabase.from('items').update({ location: newName }).eq('inventory_id', familyId).eq('location', oldName);
+      const { error } = await supabase.from('drawers').update({ name: newName }).eq('id', drawerId);
+      if (!error) {
+        setDrawers(prev => prev.map(dr => dr.id === drawerId ? { ...dr, name: newName } : dr));
+        setItems(prev => prev.map(it => it.location === oldName ? { ...it, location: newName } : it));
+      }
+    } else {
+      setDrawers(prev => prev.map(dr => dr.id === drawerId || dr.name === oldName ? { ...dr, name: newName } : dr));
+      setItems(prev => prev.map(it => it.location === oldName ? { ...it, location: newName } : it));
+    }
+  };
+
   const createFamily = async (name = 'Ma Famille') => {
     const { data, error } = await supabase.from('inventories').insert([{ name }]).select().single();
     if (!error && data) {
@@ -171,5 +186,5 @@ export const useInventory = () => {
     } catch (e) { return null; }
   };
 
-  return { items, drawers, loading, familyId, addItem, updateItem, deleteItem, addDrawer, deleteDrawer, createFamily, joinFamily, leaveFamily, getItemSuggestions };
+  return { items, drawers, loading, familyId, addItem, updateItem, deleteItem, addDrawer, deleteDrawer, updateDrawer, createFamily, joinFamily, leaveFamily, getItemSuggestions };
 };

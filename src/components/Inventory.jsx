@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle } from 'lucide-react';
+import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle, Edit3 } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 import { ConfirmModal } from './ConfirmModal';
 
@@ -49,13 +49,16 @@ export const ItemRow = ({ item, onUpdate, onDelete }) => {
   );
 };
 
-export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer }) => {
+export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddingDrawer, setIsAddingDrawer] = useState(false);
   const [newDrawerName, setNewDrawerName] = useState('');
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
+  const [editingDrawerId, setEditingDrawerId] = useState(null);
+  const [editName, setEditName] = useState('');
 
   const toggleDrawer = (drawerName) => {
+    // Prevent toggle when clicking icons
     setCollapsedDrawers(prev => ({
       ...prev,
       [drawerName]: !prev[drawerName]
@@ -77,6 +80,19 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     } else {
       deleteDrawer(drawerName);
     }
+  };
+
+  const handleStartEditing = (e, drawer) => {
+    e.stopPropagation();
+    setEditingDrawerId(drawer.id || drawer.name);
+    setEditName(drawer.name);
+  };
+
+  const handleSaveRename = (drawerId, oldName) => {
+    if (editName.trim() && editName !== oldName) {
+      updateDrawer(drawerId, editName.trim(), oldName);
+    }
+    setEditingDrawerId(null);
   };
 
   const handleCreateDrawer = () => {
@@ -123,22 +139,47 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
       {drawers.map((drawer) => {
         const drawerItems = groupedItems[drawer.name] || [];
         const isCollapsed = collapsedDrawers[drawer.name];
+        const isEditing = editingDrawerId === (drawer.id || drawer.name);
 
         return (
           <div key={drawer.id || drawer.name} className="drawer-section">
             <div className="items-stack glass">
               <div className="drawer-header" onClick={() => toggleDrawer(drawer.name)}>
-                <div className="header-left">
+                <div className="header-left" style={{ flex: 1 }}>
                   <ChevronRight size={18} className={`chevron ${!isCollapsed ? 'open' : ''}`} />
-                  <h2>{drawer.name}</h2>
+                  {isEditing ? (
+                    <input 
+                      autoFocus
+                      className="drawer-rename-input"
+                      value={editName}
+                      onChange={e => setEditName(e.target.value)}
+                      onBlur={() => handleSaveRename(drawer.id || drawer.name, drawer.name)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') handleSaveRename(drawer.id || drawer.name, drawer.name);
+                        if (e.key === 'Escape') setEditingDrawerId(null);
+                      }}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  ) : (
+                    <h2>{drawer.name}</h2>
+                  )}
                   <span className="count">{drawerItems.length}</span>
                 </div>
-                <button 
-                  className="delete-drawer-btn" 
-                  onClick={(e) => handleDeleteDrawer(e, drawer.name)}
-                >
-                  <Trash2 size={16} />
-                </button>
+                
+                <div className="drawer-header-actions">
+                  <button 
+                    className="edit-drawer-btn" 
+                    onClick={(e) => handleStartEditing(e, drawer)}
+                  >
+                    <Edit3 size={14} />
+                  </button>
+                  <button 
+                    className="delete-drawer-btn" 
+                    onClick={(e) => handleDeleteDrawer(e, drawer.name)}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
 
               <AnimatePresence>

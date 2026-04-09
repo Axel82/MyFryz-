@@ -18,6 +18,7 @@ function App() {
     deleteItem, 
     addDrawer,
     deleteDrawer,
+    updateDrawer,
     createFamily, 
     joinFamily, 
     leaveFamily, 
@@ -62,6 +63,7 @@ function App() {
                 onDelete={deleteItem} 
                 addDrawer={addDrawer}
                 deleteDrawer={deleteDrawer}
+                updateDrawer={updateDrawer}
               />
             )}
           </motion.div>

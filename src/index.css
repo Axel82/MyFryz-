@@ -265,8 +265,38 @@ button:active {
 .chevron.open { transform: rotate(90deg); }
 
 .count { background: var(--accent-glow); color: var(--accent); padding: 1px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-.delete-drawer-btn { background: none; color: var(--text-secondary); opacity: 0.2; transform: scale(0.9); }
+
+.drawer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-drawer-btn, .delete-drawer-btn { 
+  background: none; 
+  color: var(--text-secondary); 
+  opacity: 0.3; 
+  transition: all 0.2s; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-drawer-btn:hover { opacity: 1; color: var(--accent); }
 .delete-drawer-btn:hover { opacity: 1; color: #ef4444; }
+
+.drawer-rename-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: white;
+  padding: 2px 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 100%;
+  max-width: 200px;
+  outline: none;
+}
 
 .items-container {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -297,6 +327,22 @@ button:active {
 .qty-minimal { display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.15); padding: 2px 4px; border-radius: 6px; }
 .qty-btn-mini { width: 22px; height: 22px; font-size: 0.8rem; border-radius: 4px; background: rgba(255,255,255,0.05); color: white; display: flex; align-items: center; justify-content: center; }
 .qty-val { font-weight: 700; font-size: 0.9rem; min-width: 16px; text-align: center; }
+
+.delete-btn { 
+  color: #f87171; 
+  background: rgba(239, 68, 68, 0.05); 
+  padding: 6px;
+  border-radius: 6px;
+  opacity: 0.6; 
+  transition: all 0.2s; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-btn:hover { 
+  opacity: 1; 
+  background: rgba(239, 68, 68, 0.15); 
+}
 
 .empty-drawer-msg { font-size: 0.8rem; text-align: center; padding: 12px; font-style: italic; opacity: 0.4; }
 .drawer-actions { margin-top: 16px; padding-bottom: 40px; }
