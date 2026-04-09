@@ -29,7 +29,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build Web App
-        run: npm run build
+        run: CI=false npm run build
 
       - name: Capacitor Sync
         run: npx cap sync android
@@ -38,7 +38,12 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
+
+      - name: List files on failure
+        if: failure()
+        run: |
+          ls -R android/app/build/outputs/apk/ || echo "APK dir not found"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
