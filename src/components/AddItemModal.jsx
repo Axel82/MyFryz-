@@ -126,7 +126,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                 <div className="input-group">
                   <label>Poids (grammes)</label>
                   <div className="quantity-selector weight-selector">
-                    <button type="button" onClick={() => setFormData({ ...formData, weight: Math.max(0, (formData.weight || 0) - 100) })}>-100</button>
+                    <button type="button" onClick={() => setFormData({ ...formData, weight: Math.max(0, (formData.weight || 0) - 100) })}>-</button>
                     <span>{formData.weight || 0}g</span>
                     <button type="button" onClick={() => setFormData({ ...formData, weight: (formData.weight || 0) + 100 })}>+</button>
                   </div>

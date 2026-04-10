@@ -23,7 +23,6 @@ export const ItemRow = ({ item, onUpdate, onDelete }) => {
             <h3>{item.name}</h3>
             {item.weight > 0 && <span className="weight-badge">{item.weight}g</span>}
           </div>
-          <span className="category-label">{category.name}</span>
         </div>
 
         <div className="row-actions">
