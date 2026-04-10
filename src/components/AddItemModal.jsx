@@ -5,8 +5,11 @@ import { X, Scan, Loader2, AlertCircle } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
 const Scanner = ({ onScan, onClose }) => {
+  const scannerRef = React.useRef(null);
+
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader");
+    scannerRef.current = html5QrCode;
     const config = { fps: 10, qrbox: { width: 250, height: 150 } };
 
     const startScanner = async () => {
@@ -16,7 +19,7 @@ const Scanner = ({ onScan, onClose }) => {
           config, 
           (decodedText) => {
             onScan(decodedText);
-            stopScanner();
+            handleStop();
           }
         );
       } catch (err) {
@@ -24,26 +27,26 @@ const Scanner = ({ onScan, onClose }) => {
       }
     };
 
-    const stopScanner = async () => {
-      try {
-        if (html5QrCode.isScanning) {
-          await html5QrCode.stop();
-          html5QrCode.clear();
-        }
-      } catch (err) {
-        console.error("Erreur d'arrêt du scanner:", err);
-      }
-      onClose();
-    };
-
     startScanner();
 
     return () => {
-      if (html5QrCode.isScanning) {
-        html5QrCode.stop().catch(err => console.error("Failed to stop scanner on unmount", err));
+      if (scannerRef.current?.isScanning) {
+        scannerRef.current.stop().catch(() => {});
       }
     };
-  }, [onScan, onClose]);
+  }, [onScan]);
+
+  const handleStop = async () => {
+    if (scannerRef.current?.isScanning) {
+      try {
+        await scannerRef.current.stop();
+        scannerRef.current.clear();
+      } catch (err) {
+        console.error("Erreur d'arrêt:", err);
+      }
+    }
+    onClose();
+  };
 
   return (
     <div className="scanner-container">
@@ -51,7 +54,9 @@ const Scanner = ({ onScan, onClose }) => {
         <div id="reader"></div>
         <div className="scanner-overlay"></div>
       </div>
-      <button onClick={onClose} className="close-scanner">Annuler le scan</button>
+      <button onClick={handleStop} className="close-scanner">
+        Annuler le scan
+      </button>
     </div>
   );
 };
