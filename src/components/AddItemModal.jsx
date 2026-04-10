@@ -1,33 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Scan, Loader2, AlertCircle } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
 const Scanner = ({ onScan, onClose }) => {
   useEffect(() => {
-    const scanner = new Html5QrcodeScanner("reader", { 
-      fps: 10, 
-      qrbox: { width: 250, height: 150 },
-      aspectRatio: 1.0
-    });
+    const html5QrCode = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 150 } };
 
-    scanner.render((decodedText) => {
-      onScan(decodedText);
-      scanner.clear();
+    const startScanner = async () => {
+      try {
+        await html5QrCode.start(
+          { facingMode: "environment" }, 
+          config, 
+          (decodedText) => {
+            onScan(decodedText);
+            stopScanner();
+          }
+        );
+      } catch (err) {
+        console.error("Erreur de démarrage du scanner:", err);
+      }
+    };
+
+    const stopScanner = async () => {
+      try {
+        if (html5QrCode.isScanning) {
+          await html5QrCode.stop();
+          html5QrCode.clear();
+        }
+      } catch (err) {
+        console.error("Erreur d'arrêt du scanner:", err);
+      }
       onClose();
-    }, () => {
-      // Ignore errors during scan
-    });
+    };
+
+    startScanner();
 
     return () => {
-      scanner.clear().catch(err => console.error("Failed to clear scanner", err));
+      if (html5QrCode.isScanning) {
+        html5QrCode.stop().catch(err => console.error("Failed to stop scanner on unmount", err));
+      }
     };
-  }, [onClose, onScan]);
+  }, [onScan, onClose]);
 
   return (
     <div className="scanner-container">
-      <div id="reader"></div>
+      <div className="scanner-box">
+        <div id="reader"></div>
+        <div className="scanner-overlay"></div>
+      </div>
       <button onClick={onClose} className="close-scanner">Annuler le scan</button>
     </div>
   );
