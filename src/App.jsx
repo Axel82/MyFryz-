@@ -65,7 +65,6 @@ function App() {
             <div className="section-header">
               <h2>{t.stock}</h2>
               <div className="status-row">
-                <p>{items.length} {t.total_items}</p>
                 {familyId && <span className="cloud-badge">Cloud Sync ON</span>}
               </div>
             </div>
