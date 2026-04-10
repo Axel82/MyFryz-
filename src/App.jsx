@@ -4,6 +4,7 @@ import { InventoryList } from './components/Inventory';
 import { AddItemModal } from './components/AddItemModal';
 import { AboutModal } from './components/AboutModal';
 import { FamilySettings } from './components/FamilySettings';
+import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { useInventory } from './hooks/useInventory';
 import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +55,7 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('myfryz_theme') || '');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [isSupabaseConfigOpen, setIsSupabaseConfigOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('stock');
 
   const t = translations[language];
@@ -91,7 +93,7 @@ function App() {
               <h2>{t.stock}</h2>
               <div className="status-row">
                 {familyId && (
-                  <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`}>
+                  <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`} onClick={() => !isCloudEnabled && setIsSupabaseConfigOpen(true)}>
                     {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
                   </span>
                 )}
@@ -135,11 +137,22 @@ function App() {
               joinFamily={joinFamily}
               leaveFamily={leaveFamily}
               itemCount={items.length}
+              isCloudEnabled={isCloudEnabled}
+              onOpenCloudConfig={() => setIsSupabaseConfigOpen(true)}
               t={t}
             />
           </motion.div>
         )}
       </AnimatePresence>
+
+      <AddItemModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)}
+        onAdd={addItem}
+        getItemSuggestions={getItemSuggestions}
+        drawers={drawers}
+        t={t}
+      />
 
       <AddItemModal 
         isOpen={isAddModalOpen} 
@@ -157,6 +170,12 @@ function App() {
         setLanguage={setLanguage}
         theme={theme}
         setTheme={setTheme}
+        t={t}
+      />
+
+      <SupabaseConfigModal
+        isOpen={isSupabaseConfigOpen}
+        onClose={() => setIsSupabaseConfigOpen(false)}
         t={t}
       />
     </Layout>

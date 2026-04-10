@@ -43,7 +43,18 @@ export const translations = {
     plat: "Plat préparé",
     glaces: "Glaces",
     autres: "Autres",
-    empty_drawer: "Ce tiroir est vide"
+    empty_drawer: "Ce tiroir est vide",
+    supabase_config_title: "Configuration Cloud",
+    supabase_explainer: "Connectez votre propre base de données Supabase pour synchroniser vos données dans le cloud. Créez un projet gratuit sur supabase.com, puis copiez l'URL et la clé 'anon public' depuis Settings → API.",
+    supabase_url: "URL du projet Supabase",
+    supabase_anon_key: "Clé Anon (anon public)",
+    supabase_test_btn: "Tester la connexion",
+    supabase_testing: "Test en cours…",
+    supabase_test_ok: "Connexion réussie !",
+    supabase_test_fail: "Connexion échouée",
+    supabase_clear_btn: "Supprimer la configuration",
+    supabase_clear_confirm: "Supprimer la configuration Supabase ? L'application fonctionnera en mode local uniquement.",
+    configure_cloud: "Configurer la synchronisation cloud"
   },
   en: {
     stock: "Stock",
@@ -89,6 +100,17 @@ export const translations = {
     plat: "Ready Meal",
     glaces: "Ice Cream",
     autres: "Others",
-    empty_drawer: "This drawer is empty"
+    empty_drawer: "This drawer is empty",
+    supabase_config_title: "Cloud Configuration",
+    supabase_explainer: "Connect your own Supabase database to sync your data to the cloud. Create a free project at supabase.com, then copy the URL and 'anon public' key from Settings → API.",
+    supabase_url: "Supabase Project URL",
+    supabase_anon_key: "Anon Key (anon public)",
+    supabase_test_btn: "Test Connection",
+    supabase_testing: "Testing…",
+    supabase_test_ok: "Connection successful!",
+    supabase_test_fail: "Connection failed",
+    supabase_clear_btn: "Remove configuration",
+    supabase_clear_confirm: "Remove Supabase configuration? The app will run in local-only mode.",
+    configure_cloud: "Configure cloud sync"
   }
 };

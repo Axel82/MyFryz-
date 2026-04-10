@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, Copy, LogOut, CheckCircle2, Loader2, Users } from 'lucide-react';
 
-export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount, t }) => {
+export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount, isCloudEnabled, onOpenCloudConfig, t }) => {
   const [inputCode, setInputCode] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,27 +49,39 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
               {t.solo_desc}
             </p>
 
-            <button 
-              className="btn-primary full-width" 
-              onClick={handleCreate}
-              disabled={loading}
-            >
-              {loading ? <Loader2 className="animate-spin" /> : t.create_family}
-            </button>
-
-            <div className="divider"><span>{t.or}</span></div>
-
-            <div className="join-group">
-              <input 
-                type="text" 
-                placeholder={t.enter_family_code}
-                value={inputCode}
-                onChange={(e) => setInputCode(e.target.value)}
-              />
-              <button className="btn-secondary" onClick={handleJoin}>
-                {t.join}
+            {!isCloudEnabled ? (
+              <button 
+                className="btn-primary full-width" 
+                onClick={onOpenCloudConfig}
+                style={{ background: 'var(--accent)', color: '#020617', marginTop: '16px' }}
+              >
+                {t.configure_cloud}
               </button>
-            </div>
+            ) : (
+              <>
+                <button 
+                  className="btn-primary full-width" 
+                  onClick={handleCreate}
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="animate-spin" /> : t.create_family}
+                </button>
+
+                <div className="divider"><span>{t.or}</span></div>
+
+                <div className="join-group">
+                  <input 
+                    type="text" 
+                    placeholder={t.enter_family_code}
+                    value={inputCode}
+                    onChange={(e) => setInputCode(e.target.value)}
+                  />
+                  <button className="btn-secondary" onClick={handleJoin}>
+                    {t.join}
+                  </button>
+                </div>
+              </>
+            )}
           </motion.div>
         ) : (
           <motion.div 
