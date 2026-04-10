@@ -187,7 +187,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
                       />
                     ))}
                     {drawerItems.length === 0 && (
-                      <p className="empty-drawer-msg">Ce tiroir est vide</p>
+                      <p className="empty-drawer-msg">{t.empty_drawer}</p>
                     )}
                   </motion.div>
                 )}
@@ -204,7 +204,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
               autoFocus 
               value={newDrawerName} 
               onChange={e => setNewDrawerName(e.target.value)}
-              placeholder="Nom du tiroir (ex: Viandes)"
+              placeholder={t.add_drawer}
               onKeyDown={e => e.key === 'Enter' && handleCreateDrawer()}
             />
             <div className="form-buttons">
@@ -215,7 +215,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         ) : (
           <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)}>
             <PlusCircle size={18} />
-            Ajouter un tiroir
+            {t.add_drawer}
           </button>
         )}
       </div>
@@ -227,6 +227,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         onUpdate={onUpdate}
         onDelete={onDelete}
         drawers={drawers}
+        t={t}
       />
     </div>
   );

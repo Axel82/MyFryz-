@@ -42,7 +42,8 @@ export const translations = {
     legumes: "Légumes",
     plat: "Plat préparé",
     glaces: "Glaces",
-    autres: "Autres"
+    autres: "Autres",
+    empty_drawer: "Ce tiroir est vide"
   },
   en: {
     stock: "Stock",
@@ -87,6 +88,7 @@ export const translations = {
     legumes: "Vegetables",
     plat: "Ready Meal",
     glaces: "Ice Cream",
-    autres: "Others"
+    autres: "Others",
+    empty_drawer: "This drawer is empty"
   }
 };
