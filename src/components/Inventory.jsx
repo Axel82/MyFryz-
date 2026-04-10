@@ -34,7 +34,7 @@ export const ItemRow = ({ item, onClick }) => {
   );
 };
 
-export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer }) => {
+export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, t }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddingDrawer, setIsAddingDrawer] = useState(false);
   const [newDrawerName, setNewDrawerName] = useState('');
@@ -95,7 +95,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     return (
       <div className="empty-state">
         <Package size={48} className="empty-icon" />
-        <h3>Le congélateur est vide</h3>
+        <h3>{t.empty_fridge}</h3>
         <p>Ajoutez un tiroir ou un article pour commencer.</p>
         
         {isAddingDrawer ? (

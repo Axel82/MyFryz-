@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, Minus, Plus } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
-export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers }) => {
+export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers, t }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: 'autres',
@@ -31,7 +31,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
   };
 
   const handleDelete = () => {
-    if (confirm(`Supprimer ${formData.name} ?`)) {
+    if (confirm(`${t.delete} ${formData.name} ?`)) {
       onDelete(item.id);
       onClose();
     }
@@ -58,13 +58,13 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
             className="add-modal edit-modal glass-dark"
           >
             <div className="modal-header">
-              <h2>Modifier l'article</h2>
+              <h2>{t.about}</h2>
               <button onClick={onClose} className="icon-btn"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="add-form">
               <div className="input-group">
-                <label>Nom du produit</label>
+                <label>{t.product_name}</label>
                 <input 
                   type="text" 
                   value={formData.name}
@@ -75,13 +75,13 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
 
               <div className="grid-row">
                 <div className="input-group">
-                  <label>Catégorie</label>
+                  <label>{t.category}</label>
                   <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                     {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                   </select>
                 </div>
                 <div className="input-group">
-                  <label>Emplacement (Tiroir)</label>
+                  <label>{t.location}</label>
                   <select value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })}>
                     {drawers.map(dr => <option key={dr.id || dr.name} value={dr.name}>{dr.name}</option>)}
                   </select>
@@ -90,7 +90,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
 
               <div className="grid-row">
                 <div className="input-group">
-                  <label>Quantité</label>
+                  <label>{t.quantity}</label>
                   <div className="quantity-selector">
                     <button type="button" onClick={() => setFormData({ ...formData, quantity: Math.max(1, formData.quantity - 1) })}>-</button>
                     <span>{formData.quantity}</span>
@@ -98,7 +98,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                   </div>
                 </div>
                 <div className="input-group">
-                  <label>Poids (grammes)</label>
+                  <label>{t.weight}</label>
                   <div className="quantity-selector weight-selector">
                     <button type="button" onClick={() => setFormData({ ...formData, weight: Math.max(0, (formData.weight || 0) - 100) })}>-</button>
                     <span>{formData.weight || 0}g</span>
@@ -110,10 +110,10 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
               <div className="edit-modal-actions">
                 <button type="button" onClick={handleDelete} className="btn-delete-full">
                   <Trash2 size={18} />
-                  Supprimer
+                  {t.delete}
                 </button>
                 <button type="submit" className="btn-primary submit-btn flex-1">
-                  Enregistrer les modifications
+                  {t.save}
                 </button>
               </div>
             </form>

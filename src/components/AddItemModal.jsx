@@ -82,8 +82,10 @@ const Scanner = ({ onScan, onClose }) => {
   );
 };
 
-export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers }) => {
+export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers, t }) => {
   const [formData, setFormData] = useState({
+    name: '',
+    category: 'autres',
     location: '',
     quantity: 1,
     weight: 0
@@ -92,29 +94,23 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (drawers && drawers.length > 0 && !formData.location) {
-      setFormData(prev => ({ ...prev, location: drawers[0].name }));
-    }
-  }, [drawers, formData.location]);
-
   const handleScan = async (barcode) => {
     setIsLoading(true);
-    setError('');
-    const data = await getItemSuggestions(barcode);
-    setIsLoading(false);
-    if (data) {
-      setFormData(prev => ({ ...prev, name: data.name }));
+    const suggestions = await getItemSuggestions(barcode);
+    if (suggestions) {
+      setFormData({ ...formData, name: suggestions.name });
+      setIsScanning(false);
     } else {
-      setError('Produit non trouvé. Veuillez entrer le nom manuellement.');
+      setError('Produit non trouvé');
     }
+    setIsLoading(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.location) return;
     onAdd(formData);
-    setFormData({ ...formData, name: '', quantity: 1, weight: 0 });
+    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0 });
     onClose();
   };
 
@@ -123,49 +119,54 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
       {isOpen && (
         <>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="modal-overlay" onClick={onClose} />
-          <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="add-modal glass-dark" >
+          <motion.div 
+            initial={{ y: "100%" }} 
+            animate={{ y: 0 }} 
+            exit={{ y: "100%" }} 
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="add-modal glass-dark"
+          >
             <div className="modal-header">
-              <h2>Ajouter un article</h2>
+              <h2>{t.add_item}</h2>
               <button onClick={onClose} className="icon-btn"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="add-form">
               <div className="input-group">
-                <label>Nom du produit</label>
+                <label>{t.product_name}</label>
                 <div className="scan-wrapper">
                   <input 
                     type="text" 
-                    placeholder="Ex: Filet de poulet"
+                    placeholder="Nom du produit" 
                     value={formData.name}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                     required
                   />
                   <button type="button" onClick={() => setIsScanning(true)} className="icon-btn scan-btn">
-                    {isLoading ? <Loader2 className="animate-spin" /> : <Scan size={20} />}
+                    <Scan size={20} />
                   </button>
                 </div>
-                {error && <p className="error-text"><AlertCircle size={14} /> {error}</p>}
               </div>
 
               <div className="grid-row">
                 <div className="input-group">
-                  <label>Catégorie</label>
+                  <label>{t.category}</label>
                   <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                     {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                   </select>
                 </div>
                 <div className="input-group">
-                  <label>Emplacement</label>
-                  <select value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })}>
+                  <label>{t.location}</label>
+                  <select value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })} required>
+                    <option value="">-- Choisir --</option>
                     {drawers.map(dr => <option key={dr.id || dr.name} value={dr.name}>{dr.name}</option>)}
-                    {drawers.length === 0 && <option disabled>Aucun tiroir - Créez-en un d'abord</option>}
                   </select>
                 </div>
               </div>
 
               <div className="grid-row">
                 <div className="input-group">
-                  <label>Quantité</label>
+                  <label>{t.quantity}</label>
                   <div className="quantity-selector">
                     <button type="button" onClick={() => setFormData({ ...formData, quantity: Math.max(1, formData.quantity - 1) })}>-</button>
                     <span>{formData.quantity}</span>
@@ -173,7 +174,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                   </div>
                 </div>
                 <div className="input-group">
-                  <label>Poids (grammes)</label>
+                  <label>{t.weight}</label>
                   <div className="quantity-selector weight-selector">
                     <button type="button" onClick={() => setFormData({ ...formData, weight: Math.max(0, (formData.weight || 0) - 100) })}>-</button>
                     <span>{formData.weight || 0}g</span>
@@ -182,12 +183,15 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                 </div>
               </div>
 
-              <button type="submit" className="btn-primary submit-btn" disabled={drawers.length === 0}>
-                {drawers.length === 0 ? 'Créez d\'abord un tiroir' : 'Confirmer l\'ajout'}
+              <button type="submit" className="btn-primary submit-btn">
+                {t.add_item}
               </button>
             </form>
+
+            <AnimatePresence>
+              {isScanning && <Scanner onScan={handleScan} onClose={() => setIsScanning(false)} />}
+            </AnimatePresence>
           </motion.div>
-          {isScanning && <Scanner onScan={handleScan} onClose={() => setIsScanning(false)} />}
         </>
       )}
     </AnimatePresence>

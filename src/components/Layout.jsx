@@ -1,6 +1,6 @@
-import { Snowflake, LayoutGrid, Plus, Users } from 'lucide-react';
+import { Snowflake, LayoutGrid, Plus, Users, Info } from 'lucide-react';
 
-export const Layout = ({ children, onAddClick, activeTab, onTabChange }) => {
+export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick }) => {
   return (
     <div className="layout">
       <header className="header glass-dark">
@@ -9,8 +9,8 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange }) => {
             <Snowflake className="icon-blue" size={28} />
             <h1>MyFryz'</h1>
           </div>
-          <button className="icon-btn search-btn">
-            <LayoutGrid size={20} />
+          <button className="icon-btn search-btn" onClick={onAboutClick}>
+            <Info size={20} />
           </button>
         </div>
       </header>

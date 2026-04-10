@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { InventoryList } from './components/Inventory';
 import { AddItemModal } from './components/AddItemModal';
+import { AboutModal } from './components/AboutModal';
 import { FamilySettings } from './components/FamilySettings';
 import { useInventory } from './hooks/useInventory';
+import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
@@ -25,14 +27,32 @@ function App() {
     getItemSuggestions 
   } = useInventory();
 
+  // Customization State
+  const [language, setLanguage] = useState(() => localStorage.getItem('myfryz_lang') || 'fr');
+  const [theme, setTheme] = useState(() => localStorage.getItem('myfryz_theme') || '');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('stock');
+
+  const t = translations[language];
+
+  // Persist Customization
+  useEffect(() => {
+    localStorage.setItem('myfryz_lang', language);
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('myfryz_theme', theme);
+    document.body.className = theme;
+  }, [theme]);
 
   return (
     <Layout 
       onAddClick={() => setIsAddModalOpen(true)}
+      onAboutClick={() => setIsAboutModalOpen(true)}
       activeTab={activeTab}
       onTabChange={setActiveTab}
+      t={t}
     >
       <AnimatePresence mode="wait">
         {activeTab === 'stock' ? (
@@ -43,9 +63,9 @@ function App() {
             exit={{ opacity: 0, x: 20 }}
           >
             <div className="section-header">
-              <h2>Mon Inventaire</h2>
+              <h2>{t.stock}</h2>
               <div className="status-row">
-                <p>{items.length} articles au total</p>
+                <p>{items.length} {t.total_items}</p>
                 {familyId && <span className="cloud-badge">Cloud Sync ON</span>}
               </div>
             </div>
@@ -64,6 +84,7 @@ function App() {
                 addDrawer={addDrawer}
                 deleteDrawer={deleteDrawer}
                 updateDrawer={updateDrawer}
+                t={t}
               />
             )}
           </motion.div>
@@ -91,6 +112,17 @@ function App() {
         onAdd={addItem}
         getItemSuggestions={getItemSuggestions}
         drawers={drawers}
+        t={t}
+      />
+
+      <AboutModal 
+        isOpen={isAboutModalOpen}
+        onClose={() => setIsAboutModalOpen(false)}
+        language={language}
+        setLanguage={setLanguage}
+        theme={theme}
+        setTheme={setTheme}
+        t={t}
       />
     </Layout>
   );
