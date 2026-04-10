@@ -62,7 +62,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     e.stopPropagation();
     const drawerItems = groupedItems[drawerName] || [];
     if (drawerItems.length > 0) {
-      if (confirm(`Ce tiroir contient ${drawerItems.length} article(s). Tout son contenu sera définitivement supprimé. Continuer ?`)) {
+      if (confirm(t.confirm_delete_drawer.replace('{count}', drawerItems.length))) {
         deleteDrawer(drawerName);
       }
     } else {
@@ -104,7 +104,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
               autoFocus 
               value={newDrawerName} 
               onChange={e => setNewDrawerName(e.target.value)}
-              placeholder="Nom du tiroir (ex: Viandes)"
+              placeholder={t.add_drawer}
               onKeyDown={e => e.key === 'Enter' && handleCreateDrawer()}
             />
             <div className="form-buttons">
@@ -115,7 +115,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         ) : (
           <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)} style={{ marginTop: '20px' }}>
               <PlusCircle size={18} />
-              Ajouter mon premier tiroir
+              {t.add_drawer}
           </button>
         )}
       </div>

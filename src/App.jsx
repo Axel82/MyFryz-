@@ -101,6 +101,7 @@ function App() {
               joinFamily={joinFamily}
               leaveFamily={leaveFamily}
               itemCount={items.length}
+              t={t}
             />
           </motion.div>
         )}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, Copy, LogOut, CheckCircle2, Loader2, Users } from 'lucide-react';
 
-export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount }) => {
+export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount, t }) => {
   const [inputCode, setInputCode] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,8 +28,8 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
   return (
     <div className="family-settings">
       <div className="section-header">
-        <h2>Partage Familial</h2>
-        <p>Synchronisez votre congélateur avec vos proches</p>
+        <h2>{t.family_sharing}</h2>
+        <p>{t.family_sync_desc}</p>
       </div>
 
       <AnimatePresence mode="wait">
@@ -44,9 +44,9 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
             <div className="icon-circle">
               <Users size={32} />
             </div>
-            <h3>Mode Solo</h3>
+            <h3>{t.solo_mode}</h3>
             <p className="description">
-              Actuellement, vos données sont stockées uniquement sur cet appareil.
+              {t.solo_desc}
             </p>
 
             <button 
@@ -54,20 +54,20 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
               onClick={handleCreate}
               disabled={loading}
             >
-              {loading ? <Loader2 className="animate-spin" /> : 'Créer un groupe familial'}
+              {loading ? <Loader2 className="animate-spin" /> : t.create_family}
             </button>
 
-            <div className="divider"><span>OU</span></div>
+            <div className="divider"><span>{t.or}</span></div>
 
             <div className="join-group">
               <input 
                 type="text" 
-                placeholder="Entrez le code de votre famille" 
+                placeholder={t.enter_family_code}
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
               />
               <button className="btn-secondary" onClick={handleJoin}>
-                Rejoindre
+                {t.join}
               </button>
             </div>
           </motion.div>
@@ -79,12 +79,12 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
             exit={{ opacity: 0, y: -20 }}
             className="active-family glass"
           >
-            <div className="status-badge">Connecté au Cloud</div>
-            <h3>Votre Congélateur Partagé</h3>
-            <p className="item-count-sync">{itemCount} articles synchronisés</p>
+            <div className="status-badge">{t.connected_cloud}</div>
+            <h3>{t.shared_freezer}</h3>
+            <p className="item-count-sync">{itemCount} {t.items_synced}</p>
 
             <div className="share-box">
-              <label>Partagez ce code avec votre famille :</label>
+              <label>{t.share_code}</label>
               <div className="code-display" onClick={copyToClipboard}>
                 <code>{familyId}</code>
                 {copySuccess ? <CheckCircle2 size={18} className="success-icon" /> : <Copy size={18} />}
@@ -93,7 +93,7 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
 
             <button className="leave-btn" onClick={leaveFamily}>
               <LogOut size={18} />
-              Quitter le groupe
+              {t.leave_group}
             </button>
           </motion.div>
         )}

@@ -77,7 +77,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                 <div className="input-group">
                   <label>{t.category}</label>
                   <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
-                    {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                    {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{t[cat.id] || cat.name}</option>)}
                   </select>
                 </div>
                 <div className="input-group">
