@@ -501,9 +501,8 @@ button:active {
 .submit-btn { margin-top: 10px; width: 100%; }
 .error-text { color: #ef4444; font-size: 0.8rem; display: flex; align-items: center; gap: 4px; }
 
-.scanner-container { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: black; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-#reader { width: 100%; max-width: 500px; }
-.close-scanner { margin-top: 20px; color: white; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 10px; }
+.scanner-container { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: black; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.close-scanner { margin-top: 20px; color: white; background: rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; z-index: 2001; }
 
 /* --- Family Settings Styles --- */
 .family-settings {
