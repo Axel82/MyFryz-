@@ -35,10 +35,9 @@ const Scanner = ({ onScan, onClose }) => {
 
 export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    category: 'autres',
     location: '',
-    quantity: 1
+    quantity: 1,
+    weight: 0
   });
   const [isScanning, setIsScanning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +65,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     e.preventDefault();
     if (!formData.name || !formData.location) return;
     onAdd(formData);
-    setFormData({ ...formData, name: '', quantity: 1 });
+    setFormData({ ...formData, name: '', quantity: 1, weight: 0 });
     onClose();
   };
 
@@ -115,12 +114,22 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                 </div>
               </div>
 
-              <div className="input-group">
-                <label>Quantité</label>
-                <div className="quantity-selector">
-                  <button type="button" onClick={() => setFormData({ ...formData, quantity: Math.max(1, formData.quantity - 1) })}>-</button>
-                  <span>{formData.quantity}</span>
-                  <button type="button" onClick={() => setFormData({ ...formData, quantity: formData.quantity + 1 })}>+</button>
+              <div className="grid-row">
+                <div className="input-group">
+                  <label>Quantité</label>
+                  <div className="quantity-selector">
+                    <button type="button" onClick={() => setFormData({ ...formData, quantity: Math.max(1, formData.quantity - 1) })}>-</button>
+                    <span>{formData.quantity}</span>
+                    <button type="button" onClick={() => setFormData({ ...formData, quantity: formData.quantity + 1 })}>+</button>
+                  </div>
+                </div>
+                <div className="input-group">
+                  <label>Poids (grammes)</label>
+                  <div className="quantity-selector weight-selector">
+                    <button type="button" onClick={() => setFormData({ ...formData, weight: Math.max(0, (formData.weight || 0) - 100) })}>-100</button>
+                    <span>{formData.weight || 0}g</span>
+                    <button type="button" onClick={() => setFormData({ ...formData, weight: (formData.weight || 0) + 100 })}>+</button>
+                  </div>
                 </div>
               </div>
 

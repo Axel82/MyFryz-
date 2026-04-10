@@ -19,7 +19,10 @@ export const ItemRow = ({ item, onUpdate, onDelete }) => {
       
       <div className="row-content">
         <div className="row-info">
-          <h3>{item.name}</h3>
+          <div className="title-wrapper">
+            <h3>{item.name}</h3>
+            {item.weight > 0 && <span className="weight-badge">{item.weight}g</span>}
+          </div>
           <span className="category-label">{category.name}</span>
         </div>
 
