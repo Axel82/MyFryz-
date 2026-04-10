@@ -7,6 +7,7 @@ import { CATEGORIES } from '../hooks/useInventory';
 const Scanner = ({ onScan, onClose }) => {
   const scannerRef = React.useRef(null);
   const isStoppingRef = React.useRef(false);
+  const [scannerError, setScannerError] = useState(null);
 
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader");
@@ -14,6 +15,9 @@ const Scanner = ({ onScan, onClose }) => {
     const config = { fps: 10, qrbox: { width: 250, height: 150 } };
 
     const startScanner = async () => {
+      // Small delay to ensure container is ready
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
       try {
         await html5QrCode.start(
           { facingMode: "environment" }, 
@@ -25,6 +29,7 @@ const Scanner = ({ onScan, onClose }) => {
         );
       } catch (err) {
         console.error("Scanner start error:", err);
+        setScannerError(err.message || "Erreur caméra");
       }
     };
 
@@ -35,7 +40,7 @@ const Scanner = ({ onScan, onClose }) => {
       if (scannerRef.current && !isStoppingRef.current) {
         const instance = scannerRef.current;
         if (instance.isScanning) {
-          instance.stop().then(() => instance.clear()).catch(() => {
+          instance.stop().catch(() => {
             // Fallback: forcefully stop all video tracks
             const video = document.querySelector('#reader video');
             if (video && video.srcObject) {
@@ -58,12 +63,7 @@ const Scanner = ({ onScan, onClose }) => {
         }
         await scannerRef.current.clear();
       } catch (err) {
-        console.warn("Scanner stop warning:", err);
-        // Manual track termination fallback
-        const video = document.querySelector('#reader video');
-        if (video && video.srcObject) {
-          video.srcObject.getTracks().forEach(track => track.stop());
-        }
+        console.error("Stop error:", err);
       }
     }
     onClose();
@@ -72,8 +72,18 @@ const Scanner = ({ onScan, onClose }) => {
   return (
     <div className="scanner-container">
       <div className="scanner-box">
-        <div id="reader"></div>
-        <div className="scanner-overlay"></div>
+        {scannerError ? (
+          <div className="scanner-error">
+            <AlertCircle size={40} />
+            <p>{scannerError}</p>
+            <button onClick={onClose}>Fermer</button>
+          </div>
+        ) : (
+          <>
+            <div id="reader"></div>
+            <div className="scanner-overlay"></div>
+          </>
+        )}
       </div>
       <button onClick={handleStop} className="close-scanner">
         Annuler le scan
