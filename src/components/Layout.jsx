@@ -1,4 +1,4 @@
-import { Snowflake } from 'lucide-react';
+import { Snowflake, LayoutGrid, Plus, Users, Info } from 'lucide-react';
 
 export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, t }) => {
   return (
@@ -10,7 +10,7 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
             <h1>MyFryz'</h1>
           </div>
           <button className="icon-btn search-btn" onClick={onAboutClick}>
-            <Snowflake size={20} />
+            <Info size={20} />
           </button>
         </div>
       </header>
@@ -24,19 +24,19 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
           className={`nav-item ${activeTab === 'stock' ? 'active' : ''}`}
           onClick={() => onTabChange('stock')}
         >
-          <Snowflake size={24} />
+          <LayoutGrid size={24} />
           <span>{t.stock}</span>
         </button>
         <button className="nav-item add-btn-main" onClick={onAddClick}>
           <div className="plus-bg">
-            <Snowflake size={32} />
+            <Plus size={32} />
           </div>
         </button>
         <button 
           className={`nav-item ${activeTab === 'family' ? 'active' : ''}`}
           onClick={() => onTabChange('family')}
         >
-          <Snowflake size={24} />
+          <Users size={24} />
           <span>{t.family}</span>
         </button>
       </nav>
