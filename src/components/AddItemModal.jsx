@@ -6,6 +6,7 @@ import { CATEGORIES } from '../hooks/useInventory';
 
 const Scanner = ({ onScan, onClose }) => {
   const scannerRef = React.useRef(null);
+  const isStoppingRef = React.useRef(false);
 
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader");
@@ -23,26 +24,46 @@ const Scanner = ({ onScan, onClose }) => {
           }
         );
       } catch (err) {
-        console.error("Erreur de démarrage du scanner:", err);
+        console.error("Scanner start error:", err);
       }
     };
 
     startScanner();
 
     return () => {
-      if (scannerRef.current?.isScanning) {
-        scannerRef.current.stop().catch(() => {});
+      // Emergency stop on unmount if not already stopping
+      if (scannerRef.current && !isStoppingRef.current) {
+        const instance = scannerRef.current;
+        if (instance.isScanning) {
+          instance.stop().then(() => instance.clear()).catch(() => {
+            // Fallback: forcefully stop all video tracks
+            const video = document.querySelector('#reader video');
+            if (video && video.srcObject) {
+              video.srcObject.getTracks().forEach(track => track.stop());
+            }
+          });
+        }
       }
     };
   }, [onScan]);
 
   const handleStop = async () => {
-    if (scannerRef.current?.isScanning) {
+    if (isStoppingRef.current) return;
+    isStoppingRef.current = true;
+
+    if (scannerRef.current) {
       try {
-        await scannerRef.current.stop();
-        scannerRef.current.clear();
+        if (scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        await scannerRef.current.clear();
       } catch (err) {
-        console.error("Erreur d'arrêt:", err);
+        console.warn("Scanner stop warning:", err);
+        // Manual track termination fallback
+        const video = document.querySelector('#reader video');
+        if (video && video.srcObject) {
+          video.srcObject.getTracks().forEach(track => track.stop());
+        }
       }
     }
     onClose();
