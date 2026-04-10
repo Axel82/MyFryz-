@@ -160,7 +160,7 @@ button:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -187,16 +187,19 @@ button:active {
 .main-content {
   flex: 1;
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .bottom-nav {
   position: fixed;
   bottom: 20px;
-  left: 20px;
-  right: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 560px;
   height: 72px;
   display: flex;
   justify-content: space-around;
@@ -245,8 +248,23 @@ button:active {
   transform: scale(0.9);
 }
 
-/* --- Inventory Styles (Flat & Collapsible) --- */
-.drawer-section { margin-bottom: 24px; }
+/* --- Inventory Styles (Adaptive Grid) --- */
+.inventory-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  padding-bottom: 100px;
+}
+
+.drawer-section { 
+  margin-bottom: 0;
+  height: fit-content;
+}
+@media (max-width: 400px) {
+  .inventory-list {
+    grid-template-columns: 1fr;
+  }
+}
 
 .items-stack {
   overflow: hidden;
