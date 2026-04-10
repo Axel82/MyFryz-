@@ -1,8 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle, Edit3 } from 'lucide-react';
+import { Package, Trash2, ChevronRight, X, PlusCircle, Edit3, FolderPlus } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 import { EditItemModal } from './EditItemModal';
+
+// --- Popup Modal for adding a drawer ---
+const AddDrawerModal = ({ isOpen, onClose, onAdd, t }) => {
+  const [name, setName] = useState('');
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setName('');
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (name.trim()) {
+      onAdd(name.trim());
+      onClose();
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="modal-overlay"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="add-modal glass-dark"
+          >
+            <div className="modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FolderPlus size={20} className="icon-blue" />
+                <h2>{t.add_drawer}</h2>
+              </div>
+              <button onClick={onClose} className="icon-btn"><X size={20} /></button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="add-form">
+              <div className="input-group">
+                <label>{t.add_drawer}</label>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="ex: Tiroir 1, Bac légumes…"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn-primary submit-btn"
+                style={{ marginTop: '16px', width: '100%' }}
+                disabled={!name.trim()}
+              >
+                {t.add_drawer}
+              </button>
+            </form>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
 
 export const ItemRow = ({ item, onClick }) => {
   const category = CATEGORIES.find(c => c.id === item.category) || CATEGORIES[CATEGORIES.length - 1];
@@ -36,12 +110,10 @@ export const ItemRow = ({ item, onClick }) => {
 
 export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, t }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
-  const [isAddingDrawer, setIsAddingDrawer] = useState(false);
-  const [newDrawerName, setNewDrawerName] = useState('');
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
   const [editingDrawerId, setEditingDrawerId] = useState(null);
   const [editName, setEditName] = useState('');
-  
   const [editingItem, setEditingItem] = useState(null);
 
   const toggleDrawer = (drawerName) => {
@@ -83,42 +155,25 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     setEditingDrawerId(null);
   };
 
-  const handleCreateDrawer = () => {
-    if (newDrawerName.trim()) {
-      addDrawer(newDrawerName.trim());
-      setNewDrawerName('');
-      setIsAddingDrawer(false);
-    }
-  };
-
   if (drawers.length === 0 && items.length === 0) {
     return (
-      <div className="empty-state">
-        <Package size={48} className="empty-icon" />
-        <h3>{t.empty_fridge}</h3>
-        <p>Ajoutez un tiroir ou un article pour commencer.</p>
-        
-        {isAddingDrawer ? (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="add-drawer-form glass" style={{ marginTop: '20px' }}>
-            <input 
-              autoFocus 
-              value={newDrawerName} 
-              onChange={e => setNewDrawerName(e.target.value)}
-              placeholder={t.add_drawer}
-              onKeyDown={e => e.key === 'Enter' && handleCreateDrawer()}
-            />
-            <div className="form-buttons">
-              <button onClick={() => setIsAddingDrawer(false)} className="icon-btn-small"><X size={16} /></button>
-              <button onClick={handleCreateDrawer} className="icon-btn-small active"><Plus size={16} /></button>
-            </div>
-          </motion.div>
-        ) : (
-          <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)} style={{ marginTop: '20px' }}>
-              <PlusCircle size={18} />
-              {t.add_drawer}
+      <>
+        <div className="empty-state">
+          <Package size={48} className="empty-icon" />
+          <h3>{t.empty_fridge}</h3>
+          <p>Ajoutez un tiroir ou un article pour commencer.</p>
+          <button className="btn-add-drawer glass" onClick={() => setIsAddDrawerOpen(true)} style={{ marginTop: '20px' }}>
+            <PlusCircle size={18} />
+            {t.add_drawer}
           </button>
-        )}
-      </div>
+        </div>
+        <AddDrawerModal
+          isOpen={isAddDrawerOpen}
+          onClose={() => setIsAddDrawerOpen(false)}
+          onAdd={addDrawer}
+          t={t}
+        />
+      </>
     );
   }
 
@@ -198,27 +253,18 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
       })}
 
       <div className="drawer-actions">
-        {isAddingDrawer ? (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="add-drawer-form glass">
-            <input 
-              autoFocus 
-              value={newDrawerName} 
-              onChange={e => setNewDrawerName(e.target.value)}
-              placeholder={t.add_drawer}
-              onKeyDown={e => e.key === 'Enter' && handleCreateDrawer()}
-            />
-            <div className="form-buttons">
-              <button onClick={() => setIsAddingDrawer(false)} className="icon-btn-small"><X size={16} /></button>
-              <button onClick={handleCreateDrawer} className="icon-btn-small active"><Plus size={16} /></button>
-            </div>
-          </motion.div>
-        ) : (
-          <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)}>
-            <PlusCircle size={18} />
-            {t.add_drawer}
-          </button>
-        )}
+        <button className="btn-add-drawer glass" onClick={() => setIsAddDrawerOpen(true)}>
+          <PlusCircle size={18} />
+          {t.add_drawer}
+        </button>
       </div>
+
+      <AddDrawerModal
+        isOpen={isAddDrawerOpen}
+        onClose={() => setIsAddDrawerOpen(false)}
+        onAdd={addDrawer}
+        t={t}
+      />
 
       <EditItemModal 
         isOpen={!!editingItem}
@@ -232,3 +278,4 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     </div>
   );
 };
+
