@@ -7,15 +7,35 @@ import { FamilySettings } from './components/FamilySettings';
 import { useInventory } from './hooks/useInventory';
 import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
-
+import { Loader2, WifiOff } from 'lucide-react';
 import { supabase } from './supabase';
+
+// --- Error Boundary: catches render errors and shows a friendly screen ---
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error) { return { hasError: true, error }; }
+  componentDidCatch(error, info) { console.error('App crashed:', error, info); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '16px', padding: '20px', textAlign: 'center' }}>
+          <span style={{ fontSize: '3rem' }}>❄️</span>
+          <h2 style={{ color: 'white' }}>Oups, quelque chose s'est figé…</h2>
+          <p style={{ color: '#94a3b8' }}>{this.state.error?.message}</p>
+          <button onClick={() => window.location.reload()} style={{ background: 'var(--accent)', color: '#020617', padding: '12px 24px', borderRadius: '12px', fontWeight: '700' }}>Relancer l'application</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function App() {
   const { 
     items, 
     drawers,
-    loading, 
+    loading,
+    syncError,
     familyId, 
     addItem, 
     updateItem, 
@@ -73,6 +93,12 @@ function App() {
                 {familyId && (
                   <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`}>
                     {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
+                  </span>
+                )}
+                {syncError && (
+                  <span className="cloud-badge offline" title={syncError}>
+                    <WifiOff size={10} style={{ marginRight: '4px' }} />
+                    Sync error
                   </span>
                 )}
               </div>
@@ -137,4 +163,10 @@ function App() {
   );
 }
 
-export default App;
+export default function WrappedApp() {
+  return (
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  );
+}
