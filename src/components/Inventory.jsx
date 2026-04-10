@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle, Edit3 } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
-import { ConfirmModal } from './ConfirmModal';
+import { EditItemModal } from './EditItemModal';
 
-export const ItemRow = ({ item, onUpdate, onDelete }) => {
+export const ItemRow = ({ item, onClick }) => {
   const category = CATEGORIES.find(c => c.id === item.category) || CATEGORIES[CATEGORIES.length - 1];
 
   return (
@@ -13,7 +13,8 @@ export const ItemRow = ({ item, onUpdate, onDelete }) => {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10 }}
-      className="item-row"
+      className="item-row clickable"
+      onClick={() => onClick(item)}
     >
       <div className="row-indicator" style={{ backgroundColor: category.color }}></div>
       
@@ -26,25 +27,7 @@ export const ItemRow = ({ item, onUpdate, onDelete }) => {
         </div>
 
         <div className="row-actions">
-          <div className="qty-minimal">
-            <button 
-              onClick={() => onUpdate(item.id, { quantity: Math.max(0, item.quantity - 1) })}
-              className="qty-btn-mini"
-            >
-              <Minus size={12} />
-            </button>
-            <span className="qty-val">{item.quantity}</span>
-            <button 
-              onClick={() => onUpdate(item.id, { quantity: item.quantity + 1 })}
-              className="qty-btn-mini"
-            >
-              <Plus size={12} />
-            </button>
-          </div>
-          
-          <button onClick={() => onDelete(item.id)} className="delete-btn">
-            <Trash2 size={16} />
-          </button>
+           <span className="qty-badge">x{item.quantity}</span>
         </div>
       </div>
     </motion.div>
@@ -58,9 +41,10 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
   const [editingDrawerId, setEditingDrawerId] = useState(null);
   const [editName, setEditName] = useState('');
+  
+  const [editingItem, setEditingItem] = useState(null);
 
   const toggleDrawer = (drawerName) => {
-    // Prevent toggle when clicking icons
     setCollapsedDrawers(prev => ({
       ...prev,
       [drawerName]: !prev[drawerName]
@@ -78,19 +62,21 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     e.stopPropagation();
     const drawerItems = groupedItems[drawerName] || [];
     if (drawerItems.length > 0) {
-      setDrawerToDelete(drawerName);
+      if (confirm(`Ce tiroir contient ${drawerItems.length} article(s). Tout son contenu sera définitivement supprimé. Continuer ?`)) {
+        deleteDrawer(drawerName);
+      }
     } else {
       deleteDrawer(drawerName);
     }
   };
 
-  const handleStartEditing = (e, drawer) => {
+  const handleStartEditingDrawer = (e, drawer) => {
     e.stopPropagation();
     setEditingDrawerId(drawer.id || drawer.name);
     setEditName(drawer.name);
   };
 
-  const handleSaveRename = (drawerId, oldName) => {
+  const handleSaveDrawerRename = (drawerId, oldName) => {
     if (editName.trim() && editName !== oldName) {
       updateDrawer(drawerId, editName.trim(), oldName);
     }
@@ -141,7 +127,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
       {drawers.map((drawer) => {
         const drawerItems = groupedItems[drawer.name] || [];
         const isCollapsed = collapsedDrawers[drawer.name];
-        const isEditing = editingDrawerId === (drawer.id || drawer.name);
+        const isEditingDrawer = editingDrawerId === (drawer.id || drawer.name);
 
         return (
           <div key={drawer.id || drawer.name} className="drawer-section">
@@ -149,15 +135,15 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
               <div className="drawer-header" onClick={() => toggleDrawer(drawer.name)}>
                 <div className="header-left" style={{ flex: 1 }}>
                   <ChevronRight size={18} className={`chevron ${!isCollapsed ? 'open' : ''}`} />
-                  {isEditing ? (
+                  {isEditingDrawer ? (
                     <input 
                       autoFocus
                       className="drawer-rename-input"
                       value={editName}
                       onChange={e => setEditName(e.target.value)}
-                      onBlur={() => handleSaveRename(drawer.id || drawer.name, drawer.name)}
+                      onBlur={() => handleSaveDrawerRename(drawer.id || drawer.name, drawer.name)}
                       onKeyDown={e => {
-                        if (e.key === 'Enter') handleSaveRename(drawer.id || drawer.name, drawer.name);
+                        if (e.key === 'Enter') handleSaveDrawerRename(drawer.id || drawer.name, drawer.name);
                         if (e.key === 'Escape') setEditingDrawerId(null);
                       }}
                       onClick={e => e.stopPropagation()}
@@ -171,7 +157,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
                 <div className="drawer-header-actions">
                   <button 
                     className="edit-drawer-btn" 
-                    onClick={(e) => handleStartEditing(e, drawer)}
+                    onClick={(e) => handleStartEditingDrawer(e, drawer)}
                   >
                     <Edit3 size={14} />
                   </button>
@@ -197,8 +183,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
                       <ItemRow 
                         key={item.id} 
                         item={item} 
-                        onUpdate={onUpdate} 
-                        onDelete={onDelete} 
+                        onClick={setEditingItem}
                       />
                     ))}
                     {drawerItems.length === 0 && (
@@ -235,12 +220,13 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         )}
       </div>
 
-      <ConfirmModal 
-        isOpen={!!drawerToDelete}
-        onClose={() => setDrawerToDelete(null)}
-        onConfirm={() => deleteDrawer(drawerToDelete)}
-        title="Supprimer le tiroir ?"
-        message={`Ce tiroir contient ${groupedItems[drawerToDelete]?.length || 0} article(s). Tout son contenu sera définitivement supprimé.`}
+      <EditItemModal 
+        isOpen={!!editingItem}
+        onClose={() => setEditingItem(null)}
+        item={editingItem}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        drawers={drawers}
       />
     </div>
   );

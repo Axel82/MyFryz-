@@ -304,12 +304,17 @@ button:active {
 
 .item-row {
   position: relative;
-  padding: 8px 16px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease;
 }
+
+.item-row.clickable { cursor: pointer; }
+.item-row.clickable:hover { background: rgba(255, 255, 255, 0.03); }
+.item-row.clickable:active { background: rgba(255, 255, 255, 0.05); transform: scale(0.99); }
 
 .item-row:last-child { border-bottom: none; }
 
@@ -327,25 +332,41 @@ button:active {
 .row-info .category-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: -2px; display: block; }
 .row-actions { display: flex; align-items: center; gap: 12px; }
 
-.qty-minimal { display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.15); padding: 2px 4px; border-radius: 6px; }
-.qty-btn-mini { width: 22px; height: 22px; font-size: 0.8rem; border-radius: 4px; background: rgba(255,255,255,0.05); color: white; display: flex; align-items: center; justify-content: center; }
-.qty-val { font-weight: 700; font-size: 0.9rem; min-width: 16px; text-align: center; }
-
-.delete-btn { 
-  color: #f87171; 
-  background: rgba(239, 68, 68, 0.05); 
-  padding: 6px;
+.qty-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 2px 8px;
   border-radius: 6px;
-  opacity: 0.6; 
-  transition: all 0.2s; 
+}
+
+.edit-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-delete-full {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
 }
-.delete-btn:hover { 
-  opacity: 1; 
-  background: rgba(239, 68, 68, 0.15); 
+
+.btn-delete-full:hover {
+  background: #ef4444;
+  color: white;
 }
+
+.flex-1 { flex: 1; }
 
 .empty-drawer-msg { font-size: 0.8rem; text-align: center; padding: 12px; font-style: italic; opacity: 0.4; }
 .drawer-actions { margin-top: 16px; padding-bottom: 40px; }
