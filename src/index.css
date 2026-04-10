@@ -693,4 +693,4 @@ button:active {
 .theme-preview { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid transparent; transition: all 0.2s; }
 .theme-btn.active .theme-preview { border-color: white; box-shadow: 0 0 15px var(--theme-color); }
 .theme-btn.active span { color: white; font-weight: 600; }
-.theme-btn span { font-size: 0.8rem; }
+.cloud-badge.offline { background: rgba(71, 85, 105, 0.4); color: #94a3b8; border-color: rgba(255, 255, 255, 0.1); }

@@ -9,6 +9,8 @@ import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
+import { supabase } from './supabase';
+
 function App() {
   const { 
     items, 
@@ -46,6 +48,9 @@ function App() {
     document.body.className = theme;
   }, [theme]);
 
+  // Handle missing supabase env
+  const isCloudEnabled = !!supabase;
+
   return (
     <Layout 
       onAddClick={() => setIsAddModalOpen(true)}
@@ -65,7 +70,11 @@ function App() {
             <div className="section-header">
               <h2>{t.stock}</h2>
               <div className="status-row">
-                {familyId && <span className="cloud-badge">Cloud Sync ON</span>}
+                {familyId && (
+                  <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`}>
+                    {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
+                  </span>
+                )}
               </div>
             </div>
             
