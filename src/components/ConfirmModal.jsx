@@ -21,7 +21,7 @@ export const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confi
             className="confirm-modal glass-dark"
           >
             <div className="confirm-icon">
-              <AlertTriangle size={32} color={isDestructive ? '#ef4444' : 'var(--accent)'} />
+              <Snowflake size={32} color={isDestructive ? '#ef4444' : 'var(--accent)'} />
             </div>
             
             <h3>{title}</h3>

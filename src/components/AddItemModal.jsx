@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Scan, Loader2, AlertCircle } from 'lucide-react';
+import { Snowflake, X, Loader2 } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
 const Scanner = ({ onScan, onClose }) => {
@@ -153,7 +153,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                     required
                   />
                   <button type="button" onClick={() => setIsScanning(true)} className="icon-btn scan-btn">
-                    <Scan size={20} />
+                    <Snowflake size={20} />
                   </button>
                 </div>
               </div>

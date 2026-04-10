@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Globe, Palette, Info, Check } from 'lucide-react';
+import { X, Check, Snowflake } from 'lucide-react';
 
 export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setTheme, t }) => {
   const themes = [
@@ -28,7 +28,7 @@ export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setT
           >
             <div className="modal-header">
               <div className="title-with-icon">
-                <Info size={20} className="icon-blue" />
+                <Snowflake size={20} className="icon-blue" />
                 <h2>{t.about}</h2>
               </div>
               <button onClick={onClose} className="icon-btn"><X size={20} /></button>
@@ -43,7 +43,7 @@ export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setT
 
               <div className="settings-section">
                 <div className="section-title">
-                  <Globe size={16} />
+                  <Snowflake size={16} />
                   <span>{t.language}</span>
                 </div>
                 <div className="language-selector">
@@ -64,7 +64,7 @@ export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setT
 
               <div className="settings-section">
                 <div className="section-title">
-                  <Palette size={16} />
+                  <Snowflake size={16} />
                   <span>{t.theme}</span>
                 </div>
                 <div className="theme-grid">

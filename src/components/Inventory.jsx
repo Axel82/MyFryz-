@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Trash2, Minus, Plus, ChevronRight, X, PlusCircle, Edit3 } from 'lucide-react';
+import { Snowflake, Package, Trash2, Minus, ChevronRight, X } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 import { EditItemModal } from './EditItemModal';
 
@@ -114,7 +114,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
           </motion.div>
         ) : (
           <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)} style={{ marginTop: '20px' }}>
-              <PlusCircle size={18} />
+              <Snowflake size={18} />
               {t.add_drawer}
           </button>
         )}
@@ -159,7 +159,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
                     className="edit-drawer-btn" 
                     onClick={(e) => handleStartEditingDrawer(e, drawer)}
                   >
-                    <Edit3 size={14} />
+                    <Snowflake size={14} />
                   </button>
                   <button 
                     className="delete-drawer-btn" 
@@ -209,12 +209,12 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
             />
             <div className="form-buttons">
               <button onClick={() => setIsAddingDrawer(false)} className="icon-btn-small"><X size={16} /></button>
-              <button onClick={handleCreateDrawer} className="icon-btn-small active"><Plus size={16} /></button>
+              <button onClick={handleCreateDrawer} className="icon-btn-small active"><Snowflake size={16} /></button>
             </div>
           </motion.div>
         ) : (
           <button className="btn-add-drawer glass" onClick={() => setIsAddingDrawer(true)}>
-            <PlusCircle size={18} />
+            <Snowflake size={18} />
             {t.add_drawer}
           </button>
         )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, Copy, LogOut, CheckCircle2, Loader2, Users } from 'lucide-react';
+import { Share2, Copy, LogOut, CheckCircle2, Loader2, Snowflake } from 'lucide-react';
 
 export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount, t }) => {
   const [inputCode, setInputCode] = useState('');
