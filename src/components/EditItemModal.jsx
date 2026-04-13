@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Trash2, Minus, Plus } from 'lucide-react';
+import { X, Trash2, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
-export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers, expirationEnabled, t }) => {
+export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers, expirationEnabled, onAddToList, t }) => {
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     category: 'autres',
@@ -15,6 +16,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
 
   useEffect(() => {
     if (item && isOpen) {
+      setIsConfirmingDelete(false);
       setFormData({
         name: item.name || '',
         category: item.category || 'autres',
@@ -33,10 +35,20 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
   };
 
   const handleDelete = () => {
-    if (confirm(`${t.delete} ${formData.name} ?`)) {
-      onDelete(item.id);
-      onClose();
-    }
+    setIsConfirmingDelete(true);
+  };
+
+  const confirmDeleteOnly = () => {
+    onDelete(item.id);
+    setIsConfirmingDelete(false);
+    onClose();
+  };
+
+  const confirmDeleteAndAdd = () => {
+    onDelete(item.id);
+    if (onAddToList) onAddToList(formData.name);
+    setIsConfirmingDelete(false);
+    onClose();
   };
 
   if (!item) return null;
@@ -60,11 +72,48 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
             className="add-modal edit-modal glass-dark"
           >
             <div className="modal-header">
-              <h2>{t.about}</h2>
-              <button onClick={onClose} className="icon-btn"><X size={20} /></button>
+              <h2>{isConfirmingDelete ? t.delete : t.about}</h2>
+              <button 
+                onClick={() => { setIsConfirmingDelete(false); onClose(); }} 
+                className="icon-btn"
+              >
+                <X size={20} />
+              </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="add-form">
+            {isConfirmingDelete ? (
+              <div className="delete-confirmation-state" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '10px 0 20px 0' }}>
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '10px' }}>
+                  {t.delete_item_prompt || "Que souhaitez-vous faire avec cet élément ?"}
+                </p>
+                <button 
+                  onClick={confirmDeleteAndAdd} 
+                  className="btn-primary" 
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
+                >
+                  <ShoppingCart size={18} />
+                  {t.delete_and_add || "Supprimer & Ajouter aux courses"}
+                </button>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                  <button 
+                    onClick={confirmDeleteOnly} 
+                    className="btn-delete-full flex-1" 
+                    style={{ margin: 0, padding: '14px' }}
+                  >
+                    <Trash2 size={18} />
+                    {t.delete_only || "Supprimer"}
+                  </button>
+                  <button 
+                    onClick={() => setIsConfirmingDelete(false)} 
+                    className="btn-cancel flex-1"
+                    style={{ padding: '14px', borderRadius: '12px', fontWeight: 600, border: '1px solid rgba(255,255,255,0.1)' }}
+                  >
+                    {t.cancel || "Annuler"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="add-form">
               <div className="input-group">
                 <label>{t.product_name}</label>
                 <input 
@@ -130,6 +179,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                 </button>
               </div>
             </form>
+            )}
           </motion.div>
         </>
       )}

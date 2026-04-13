@@ -61,7 +61,14 @@ export const translations = {
     expiration_level_2: "Alerte de Niveau 2 (mois)",
     expiration_level_1_desc: "Affiche une cloche jaune devant l'article.",
     expiration_level_2_desc: "Affiche une cloche rouge devant l'article.",
-    freeze_date: "Date de congélation"
+    freeze_date: "Date de congélation",
+    shopping_list: "Liste de courses",
+    shopping_list_empty: "Votre liste de courses est vide.",
+    shopping_list_add: "Ajouter aux courses pour :",
+    delete_item_prompt: "Que souhaitez-vous faire avec cet élément ?",
+    delete_only: "Supprimer",
+    delete_and_add: "Supprimer & Ajouter aux courses",
+    clear_list: "Vider la liste"
   },
   en: {
     stock: "Stock",
@@ -125,6 +132,13 @@ export const translations = {
     expiration_level_2: "Level 2 Alert (months)",
     expiration_level_1_desc: "Shows a yellow bell next to the item.",
     expiration_level_2_desc: "Shows a red bell next to the item.",
-    freeze_date: "Freeze Date"
+    freeze_date: "Freeze Date",
+    shopping_list: "Shopping List",
+    shopping_list_empty: "Your shopping list is empty.",
+    shopping_list_add: "Add to shopping list for :",
+    delete_item_prompt: "What do you want to do with this item?",
+    delete_only: "Delete",
+    delete_and_add: "Delete & Add to Shopping List",
+    clear_list: "Clear list"
   }
 };

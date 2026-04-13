@@ -126,7 +126,7 @@ export const ItemRow = ({ item, onClick, expirationConfig }) => {
   );
 };
 
-export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, t }) => {
+export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, onAddToList, t }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
@@ -293,6 +293,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         onDelete={onDelete}
         drawers={drawers}
         expirationEnabled={expirationConfig?.enabled}
+        onAddToList={onAddToList}
         t={t}
       />
     </div>

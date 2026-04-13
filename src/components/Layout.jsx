@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Snowflake, LayoutGrid, Plus, Users, Info, Menu, CalendarClock } from 'lucide-react';
+import { Snowflake, LayoutGrid, Plus, Users, Info, Menu, CalendarClock, ShoppingCart } from 'lucide-react';
 
-export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, onExpirationClick, t }) => {
+export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, onExpirationClick, onShoppingListClick, t }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -83,10 +83,10 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
             <Plus size={32} />
           </div>
         </button>
-        <div className="nav-item" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
-          <LayoutGrid size={24} />
-          <span>{t.stock}</span>
-        </div>
+        <button className="nav-item" onClick={onShoppingListClick}>
+          <ShoppingCart size={24} />
+          <span>{t.shopping_list || "Courses"}</span>
+        </button>
       </nav>
     </div>
   );
