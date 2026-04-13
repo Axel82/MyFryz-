@@ -92,13 +92,14 @@ const Scanner = ({ onScan, onClose }) => {
   );
 };
 
-export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers, t }) => {
+export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers, expirationEnabled, t }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: 'autres',
     location: '',
     quantity: 1,
-    weight: 0
+    weight: 0,
+    item_date: new Date().toISOString().split('T')[0]
   });
   const [isScanning, setIsScanning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -120,7 +121,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     e.preventDefault();
     if (!formData.name || !formData.location) return;
     onAdd(formData);
-    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0 });
+    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0, item_date: new Date().toISOString().split('T')[0] });
     onClose();
   };
 
@@ -173,6 +174,17 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                   </select>
                 </div>
               </div>
+
+              {expirationEnabled && (
+                <div className="input-group" style={{ marginBottom: '16px' }}>
+                  <label>{t.freeze_date || "Date de congélation"}</label>
+                  <input 
+                    type="date" 
+                    value={formData.item_date}
+                    onChange={e => setFormData({ ...formData, item_date: e.target.value })}
+                  />
+                </div>
+              )}
 
               <div className="grid-row">
                 <div className="input-group">

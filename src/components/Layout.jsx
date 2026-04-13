@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Snowflake, LayoutGrid, Plus, Users, Info, Menu } from 'lucide-react';
+import { Snowflake, LayoutGrid, Plus, Users, Info, Menu, CalendarClock } from 'lucide-react';
 
-export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, t }) => {
+export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, onExpirationClick, t }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -39,6 +39,16 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
                 >
                   <Users size={18} />
                   <span>{t.family}</span>
+                </button>
+                <button 
+                  className="dropdown-item"
+                  onClick={() => {
+                    onExpirationClick();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <CalendarClock size={18} />
+                  <span>{t.expiration_title}</span>
                 </button>
                 <button 
                   className="dropdown-item"

@@ -3,9 +3,11 @@ import { Layout } from './components/Layout';
 import { InventoryList } from './components/Inventory';
 import { AddItemModal } from './components/AddItemModal';
 import { AboutModal } from './components/AboutModal';
+import { ExpirationConfigModal } from './components/ExpirationConfigModal';
 import { FamilySettings } from './components/FamilySettings';
 import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { useInventory } from './hooks/useInventory';
+import { useExpirationConfig } from './hooks/useExpirationConfig';
 import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, WifiOff } from 'lucide-react';
@@ -55,8 +57,10 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('myfryz_theme') || '');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [isExpirationModalOpen, setIsExpirationModalOpen] = useState(false);
   const [isSupabaseConfigOpen, setIsSupabaseConfigOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('stock');
+  const [expirationConfig, setExpirationConfig] = useExpirationConfig();
 
   const t = translations[language];
 
@@ -77,6 +81,7 @@ function App() {
     <Layout 
       onAddClick={() => setIsAddModalOpen(true)}
       onAboutClick={() => setIsAboutModalOpen(true)}
+      onExpirationClick={() => setIsExpirationModalOpen(true)}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       t={t}
@@ -120,6 +125,7 @@ function App() {
                 addDrawer={addDrawer}
                 deleteDrawer={deleteDrawer}
                 updateDrawer={updateDrawer}
+                expirationConfig={expirationConfig}
                 t={t}
               />
             )}
@@ -151,15 +157,7 @@ function App() {
         onAdd={addItem}
         getItemSuggestions={getItemSuggestions}
         drawers={drawers}
-        t={t}
-      />
-
-      <AddItemModal 
-        isOpen={isAddModalOpen} 
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={addItem}
-        getItemSuggestions={getItemSuggestions}
-        drawers={drawers}
+        expirationEnabled={expirationConfig.enabled}
         t={t}
       />
 
@@ -170,6 +168,14 @@ function App() {
         setLanguage={setLanguage}
         theme={theme}
         setTheme={setTheme}
+        t={t}
+      />
+
+      <ExpirationConfigModal 
+        isOpen={isExpirationModalOpen}
+        onClose={() => setIsExpirationModalOpen(false)}
+        config={expirationConfig}
+        setConfig={setExpirationConfig}
         t={t}
       />
 

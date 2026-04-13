@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, Minus, Plus } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 
-export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers, t }) => {
+export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawers, expirationEnabled, t }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: 'autres',
     location: '',
     quantity: 1,
-    weight: 0
+    weight: 0,
+    item_date: new Date().toISOString().split('T')[0]
   });
 
   useEffect(() => {
@@ -19,7 +20,8 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
         category: item.category || 'autres',
         location: item.location || '',
         quantity: item.quantity || 1,
-        weight: item.weight || 0
+        weight: item.weight || 0,
+        item_date: item.item_date || new Date().toISOString().split('T')[0]
       });
     }
   }, [item, isOpen]);
@@ -87,6 +89,17 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                   </select>
                 </div>
               </div>
+
+              {expirationEnabled && (
+                <div className="input-group" style={{ marginBottom: '16px' }}>
+                  <label>{t.freeze_date || "Date de congélation"}</label>
+                  <input 
+                    type="date" 
+                    value={formData.item_date}
+                    onChange={e => setFormData({ ...formData, item_date: e.target.value })}
+                  />
+                </div>
+              )}
 
               <div className="grid-row">
                 <div className="input-group">

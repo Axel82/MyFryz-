@@ -54,7 +54,14 @@ export const translations = {
     supabase_test_fail: "Connexion échouée",
     supabase_clear_btn: "Supprimer la configuration",
     supabase_clear_confirm: "Supprimer la configuration Supabase ? L'application fonctionnera en mode local uniquement.",
-    configure_cloud: "Configurer la synchronisation cloud"
+    configure_cloud: "Configurer la synchronisation cloud",
+    expiration_title: "Date limite",
+    expiration_enable: "Activer les dates limites",
+    expiration_level_1: "Alerte de Niveau 1 (mois)",
+    expiration_level_2: "Alerte de Niveau 2 (mois)",
+    expiration_level_1_desc: "Affiche une cloche jaune devant l'article.",
+    expiration_level_2_desc: "Affiche une cloche rouge devant l'article.",
+    freeze_date: "Date de congélation"
   },
   en: {
     stock: "Stock",
@@ -111,6 +118,13 @@ export const translations = {
     supabase_test_fail: "Connection failed",
     supabase_clear_btn: "Remove configuration",
     supabase_clear_confirm: "Remove Supabase configuration? The app will run in local-only mode.",
-    configure_cloud: "Configure cloud sync"
+    configure_cloud: "Configure cloud sync",
+    expiration_title: "Expiration Dates",
+    expiration_enable: "Enable expiration dates",
+    expiration_level_1: "Level 1 Alert (months)",
+    expiration_level_2: "Level 2 Alert (months)",
+    expiration_level_1_desc: "Shows a yellow bell next to the item.",
+    expiration_level_2_desc: "Shows a red bell next to the item.",
+    freeze_date: "Freeze Date"
   }
 };

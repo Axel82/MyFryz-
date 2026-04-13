@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Trash2, ChevronRight, X, PlusCircle, Edit3, FolderPlus } from 'lucide-react';
+import { Package, Trash2, ChevronRight, X, PlusCircle, Edit3, FolderPlus, Bell } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
 import { EditItemModal } from './EditItemModal';
 
@@ -78,8 +78,24 @@ const AddDrawerModal = ({ isOpen, onClose, onAdd, t }) => {
   );
 };
 
-export const ItemRow = ({ item, onClick }) => {
+export const ItemRow = ({ item, onClick, expirationConfig }) => {
   const category = CATEGORIES.find(c => c.id === item.category) || CATEGORIES[CATEGORIES.length - 1];
+
+  let alertLevel = 0;
+  if (expirationConfig?.enabled && item.item_date) {
+    const today = new Date();
+    const itemDate = new Date(item.item_date);
+    let monthsPassed = (today.getFullYear() - itemDate.getFullYear()) * 12 + today.getMonth() - itemDate.getMonth();
+    if (today.getDate() < itemDate.getDate()) {
+      monthsPassed--;
+    }
+    
+    if (monthsPassed >= expirationConfig.level2Months) {
+      alertLevel = 2;
+    } else if (monthsPassed >= expirationConfig.level1Months) {
+      alertLevel = 1;
+    }
+  }
 
   return (
     <motion.div 
@@ -95,6 +111,8 @@ export const ItemRow = ({ item, onClick }) => {
       <div className="row-content">
         <div className="row-info">
           <div className="title-wrapper">
+            {alertLevel === 2 && <Bell size={16} style={{ color: '#ef4444', filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />}
+            {alertLevel === 1 && <Bell size={16} style={{ color: '#eab308', filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />}
             <h3>{item.name}</h3>
             {item.weight > 0 && <span className="weight-badge">{item.weight}g</span>}
           </div>
@@ -108,7 +126,7 @@ export const ItemRow = ({ item, onClick }) => {
   );
 };
 
-export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, t }) => {
+export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, t }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
@@ -239,6 +257,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
                         key={item.id} 
                         item={item} 
                         onClick={setEditingItem}
+                        expirationConfig={expirationConfig}
                       />
                     ))}
                     {drawerItems.length === 0 && (
@@ -273,6 +292,7 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
         onUpdate={onUpdate}
         onDelete={onDelete}
         drawers={drawers}
+        expirationEnabled={expirationConfig?.enabled}
         t={t}
       />
     </div>
