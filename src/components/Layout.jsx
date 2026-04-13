@@ -1,6 +1,20 @@
-import { Snowflake, LayoutGrid, Plus, Users, Info } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Snowflake, LayoutGrid, Plus, Users, Info, Menu } from 'lucide-react';
 
 export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, t }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="layout">
       <header className="header glass-dark">
@@ -9,9 +23,36 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
             <Snowflake className="icon-blue" size={28} />
             <h1>MyFryz'</h1>
           </div>
-          <button className="icon-btn search-btn" onClick={onAboutClick}>
-            <Info size={20} />
-          </button>
+          <div className="menu-container" ref={menuRef} style={{ position: 'relative' }}>
+            <button className="icon-btn search-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <Menu size={20} />
+            </button>
+            
+            {isMenuOpen && (
+              <div className="dropdown-menu">
+                <button 
+                  className={`dropdown-item ${activeTab === 'family' ? 'active' : ''}`}
+                  onClick={() => {
+                    onTabChange('family');
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <Users size={18} />
+                  <span>{t.family}</span>
+                </button>
+                <button 
+                  className="dropdown-item"
+                  onClick={() => {
+                    onAboutClick();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <Info size={18} />
+                  <span>{t.about}</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -32,13 +73,10 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
             <Plus size={32} />
           </div>
         </button>
-        <button 
-          className={`nav-item ${activeTab === 'family' ? 'active' : ''}`}
-          onClick={() => onTabChange('family')}
-        >
-          <Users size={24} />
-          <span>{t.family}</span>
-        </button>
+        <div className="nav-item" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+          <LayoutGrid size={24} />
+          <span>{t.stock}</span>
+        </div>
       </nav>
     </div>
   );
