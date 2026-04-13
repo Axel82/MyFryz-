@@ -1,15 +1,14 @@
-# React + Vite
+# ❄️ MyFryz'
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MyFryz' est votre compagnon mobile pour la gestion facile de votre congélateur. Développé en React/Vite (PWA ready), il inclut une synchronisation dans le cloud via Supabase.
 
-Currently, two official plugins are available:
+## ✨ Fonctionnalités Principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Dashboard Intelligent** : Listez vos aliments par tiroir et identifiez-les par catégories colorées.
+- **Scan de Code-barres** : Ajoutez de nouveaux produits automatiquement grâce à votre appareil photo.
+- **Suivi des Dates de Péremption (DLC)** : 🆕 Activez les alertes automatiques pour savoir depuis combien de mois vos produits sont congelés. L'application affiche des indicateurs discrets (cloches jaunes / rouges) en fonction des limites configurées.
+- **Espace Famille (Cloud)** : Entrez vos identifiants Supabase pour synchroniser en temps réel le congélateur entre tous les membres de la famille grâce au code de partage.
+- **Customisable** : Mode clair/sombre, couleurs personnalisées et support multi-langues.
 
 ## 📱 Installation Mobile (APK)
 
@@ -20,10 +19,9 @@ Grâce à notre pipeline **GitHub Actions**, un fichier APK est automatiquement 
 3. En bas de la page, dans la section **Artifacts**, téléchargez le fichier `MyFryz-Android-Debug`.
 4. Transférez-le sur votre téléphone et installez-le (autorisez les sources inconnues si nécessaire).
 
----
+## 🚀 Développement Local
 
-## 🚀 Installation & Développement
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
