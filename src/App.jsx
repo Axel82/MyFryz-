@@ -172,6 +172,7 @@ function App() {
         isOpen={isShoppingListOpen}
         onClose={() => setIsShoppingListOpen(false)}
         shoppingList={shoppingList}
+        onAdd={addToList}
         onRemove={removeFromList}
         onClear={clearList}
         loading={shoppingLoading}

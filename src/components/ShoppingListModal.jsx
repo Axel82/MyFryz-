@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Trash2, ShoppingCart, Loader2 } from 'lucide-react';
+import { X, Trash2, ShoppingCart, Loader2, Plus } from 'lucide-react';
 
-export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onRemove, onClear, loading, t }) => {
+export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemove, onClear, loading, t }) => {
+  const [newItemName, setNewItemName] = useState('');
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    if (newItemName.trim()) {
+      onAdd(newItemName.trim());
+      setNewItemName('');
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -31,6 +41,28 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onRemove, onC
               </button>
             </div>
 
+            <form onSubmit={handleAdd} className="add-task-form" style={{ marginBottom: '20px', display: 'flex', gap: '8px' }}>
+              <input 
+                type="text" 
+                placeholder={t.product_name}
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+                style={{ 
+                  flex: 1, padding: '12px', borderRadius: '12px', 
+                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'white', outline: 'none'
+                }}
+              />
+              <button 
+                type="submit" 
+                className="icon-btn" 
+                style={{ background: 'var(--accent)', color: '#020617' }}
+                disabled={!newItemName.trim()}
+              >
+                <Plus size={20} />
+              </button>
+            </form>
+
             <div className="settings-section" style={{ flex: 1, overflowY: 'auto', paddingRight: '10px' }}>
               {loading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
@@ -50,7 +82,7 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onRemove, onC
                     >
                       <div className="row-content">
                         <div className="title-wrapper">
-                          <h3>{item.name}</h3>
+                          <h3 style={{ margin: 0 }}>{item.name}</h3>
                         </div>
                         <button 
                           onClick={() => onRemove(item.id)} 
@@ -67,7 +99,7 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onRemove, onC
             </div>
             
             {shoppingList.length > 0 && (
-              <div className="confirm-actions" style={{ marginTop: '30px', flexShrink: 0 }}>
+              <div className="confirm-actions" style={{ marginTop: '20px', flexShrink: 0 }}>
                 <button 
                   className="btn-cancel" 
                   onClick={onClear} 
