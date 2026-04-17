@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Snowflake, LayoutGrid, Plus, Users, Info, Menu, CalendarClock, ShoppingCart } from 'lucide-react';
 
-export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutClick, onExpirationClick, onShoppingListClick, t }) => {
+export const Layout = ({ children, onAddClick, onFamilyClick, onAboutClick, onExpirationClick, onShoppingListClick, t }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -31,9 +31,9 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
             {isMenuOpen && (
               <div className="dropdown-menu">
                 <button 
-                  className={`dropdown-item ${activeTab === 'family' ? 'active' : ''}`}
+                  className="dropdown-item"
                   onClick={() => {
-                    onTabChange('family');
+                    onFamilyClick();
                     setIsMenuOpen(false);
                   }}
                 >
@@ -72,8 +72,7 @@ export const Layout = ({ children, onAddClick, activeTab, onTabChange, onAboutCl
 
       <nav className="bottom-nav glass">
         <button 
-          className={`nav-item ${activeTab === 'stock' ? 'active' : ''}`}
-          onClick={() => onTabChange('stock')}
+          className="nav-item active"
         >
           <LayoutGrid size={24} />
           <span>{t.stock}</span>

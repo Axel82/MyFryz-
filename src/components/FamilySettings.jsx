@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, Copy, LogOut, CheckCircle2, Loader2, Users } from 'lucide-react';
+import { Share2, Copy, LogOut, CheckCircle2, Loader2, Users, X } from 'lucide-react';
 
-export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily, itemCount, isCloudEnabled, onOpenCloudConfig, t }) => {
+export const FamilySettings = ({ isOpen, onClose, familyId, createFamily, joinFamily, leaveFamily, itemCount, isCloudEnabled, onOpenCloudConfig, t }) => {
   const [inputCode, setInputCode] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,13 +26,26 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
   };
 
   return (
-    <div className="family-settings">
-      <div className="section-header">
-        <h2>{t.family_sharing}</h2>
-        <p>{t.family_sync_desc}</p>
-      </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="modal-overlay" onClick={onClose} />
+          <motion.div 
+            initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="config-modal glass-dark" style={{ padding: '24px', maxHeight: '90vh', overflowY: 'auto' }}
+          >
+            <div className="modal-header" style={{ marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Users size={24} className="icon-blue" />
+                <h2 style={{ margin: 0 }}>{t.family_sharing}</h2>
+              </div>
+              <button onClick={onClose} className="icon-btn"><X size={20} /></button>
+            </div>
+            
+            <p style={{ color: '#94a3b8', marginBottom: '24px' }}>{t.family_sync_desc}</p>
 
-      <AnimatePresence mode="wait">
+            <div className="family-settings">
+              <AnimatePresence mode="wait">
         {!familyId ? (
           <motion.div 
             key="setup"
@@ -107,9 +120,13 @@ export const FamilySettings = ({ familyId, createFamily, joinFamily, leaveFamily
               <LogOut size={18} />
               {t.leave_group}
             </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
   );
 };

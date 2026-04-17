@@ -62,7 +62,7 @@ function App() {
   const [isExpirationModalOpen, setIsExpirationModalOpen] = useState(false);
   const [isSupabaseConfigOpen, setIsSupabaseConfigOpen] = useState(false);
   const [isShoppingListOpen, setIsShoppingListOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('stock');
+  const [isFamilySettingsOpen, setIsFamilySettingsOpen] = useState(false);
   const [expirationConfig, setExpirationConfig] = useExpirationConfig();
   const { shoppingList, addToList, removeFromList, clearList, loading: shoppingLoading } = useShoppingList(familyId);
 
@@ -87,75 +87,58 @@ function App() {
       onAboutClick={() => setIsAboutModalOpen(true)}
       onExpirationClick={() => setIsExpirationModalOpen(true)}
       onShoppingListClick={() => setIsShoppingListOpen(true)}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onFamilyClick={() => setIsFamilySettingsOpen(true)}
       t={t}
     >
-      <AnimatePresence mode="wait">
-        {activeTab === 'stock' ? (
-          <motion.div
-            key="stock"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-          >
-            <div className="section-header">
-              <h2>{t.stock}</h2>
-              <div className="status-row">
-                {familyId && (
-                  <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`} onClick={() => !isCloudEnabled && setIsSupabaseConfigOpen(true)}>
-                    {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
-                  </span>
-                )}
-                {syncError && (
-                  <span className="cloud-badge offline" title={syncError}>
-                    <WifiOff size={10} style={{ marginRight: '4px' }} />
-                    Sync error
-                  </span>
-                )}
-              </div>
-            </div>
-            
-            {loading ? (
-              <div className="loading-state">
-                <Loader2 className="animate-spin" size={40} />
-                <p>Synchronisation...</p>
-              </div>
-            ) : (
-              <InventoryList 
-                items={items} 
-                drawers={drawers}
-                onUpdate={updateItem} 
-                onDelete={deleteItem} 
-                addDrawer={addDrawer}
-                deleteDrawer={deleteDrawer}
-                updateDrawer={updateDrawer}
-                expirationConfig={expirationConfig}
-                onAddToList={addToList}
-                t={t}
-              />
-            )}
-          </motion.div>
-        ) : (
-          <motion.div
-            key="family"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-          >
-            <FamilySettings 
-              familyId={familyId}
-              createFamily={createFamily}
-              joinFamily={joinFamily}
-              leaveFamily={leaveFamily}
-              itemCount={items.length}
-              isCloudEnabled={isCloudEnabled}
-              onOpenCloudConfig={() => setIsSupabaseConfigOpen(true)}
-              t={t}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="section-header">
+        <h2>{t.stock}</h2>
+        <div className="status-row">
+          {familyId && (
+            <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`} onClick={() => !isCloudEnabled && setIsSupabaseConfigOpen(true)}>
+              {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
+            </span>
+          )}
+          {syncError && (
+            <span className="cloud-badge offline" title={syncError}>
+              <WifiOff size={10} style={{ marginRight: '4px' }} />
+              Sync error
+            </span>
+          )}
+        </div>
+      </div>
+      
+      {loading ? (
+        <div className="loading-state">
+          <Loader2 className="animate-spin" size={40} />
+          <p>Synchronisation...</p>
+        </div>
+      ) : (
+        <InventoryList 
+          items={items} 
+          drawers={drawers}
+          onUpdate={updateItem} 
+          onDelete={deleteItem} 
+          addDrawer={addDrawer}
+          deleteDrawer={deleteDrawer}
+          updateDrawer={updateDrawer}
+          expirationConfig={expirationConfig}
+          onAddToList={addToList}
+          t={t}
+        />
+      )}
+
+      <FamilySettings 
+        isOpen={isFamilySettingsOpen}
+        onClose={() => setIsFamilySettingsOpen(false)}
+        familyId={familyId}
+        createFamily={createFamily}
+        joinFamily={joinFamily}
+        leaveFamily={leaveFamily}
+        itemCount={items.length}
+        isCloudEnabled={isCloudEnabled}
+        onOpenCloudConfig={() => setIsSupabaseConfigOpen(true)}
+        t={t}
+      />
 
       <AddItemModal 
         isOpen={isAddModalOpen} 
