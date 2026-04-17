@@ -1,27 +1,46 @@
 # ❄️ MyFryz'
 
-MyFryz' est votre compagnon mobile pour la gestion facile de votre congélateur. Développé en React/Vite (PWA ready), il inclut une synchronisation dans le cloud via Supabase.
+MyFryz' est une application mobile moderne et légère conçue pour simplifier la gestion de votre inventaire de congélateur. Basée sur les dernières technologies web (React 19, Vite 6), elle offre une expérience fluide, une synchronisation cloud en temps réel et une compatibilité mobile native via Capacitor.
 
-## ✨ Fonctionnalités Principales
+## 🚀 Fonctionnalités Clés
 
-- **Dashboard Intelligent** : Listez vos aliments par tiroir et identifiez-les par catégories colorées.
-- **Scan de Code-barres** : Ajoutez de nouveaux produits automatiquement grâce à votre appareil photo.
-- **Suivi des Dates de Péremption (DLC)** : 🆕 Activez les alertes automatiques pour savoir depuis combien de mois vos produits sont congelés. L'application affiche des indicateurs discrets (cloches jaunes / rouges) en fonction des limites configurées.
-- **Espace Famille (Cloud)** : Entrez vos identifiants Supabase pour synchroniser en temps réel le congélateur entre tous les membres de la famille grâce au code de partage.
-- **Customisable** : Mode clair/sombre, couleurs personnalisées et support multi-langues.
+- **📦 Gestion Multititroirs** : Organisez vos aliments par tiroirs personnalisables pour retrouver vos articles en un clin d'œil.
+- **🏷️ Catégorisation Intelligente** : Des codes couleurs clairs (Viande, Poisson, Légumes, etc.) pour une lecture visuelle immédiate.
+- **🔍 Scan de Code-barres** : Intégration de `html5-qrcode` pour ajouter des produits instantanément en scannant leur code-barres.
+- **🛒 Liste de Courses Intégrée** : 
+    - Génération automatique : Ajoutez un article à la liste lors de sa suppression du congélateur.
+    - **Nouveau** : Ajout manuel d'articles directement dans la liste via une interface dédiée.
+- **🔔 Gestion des Dates Limites** : Système d'alertes à deux niveaux (configurable en mois) pour ne plus jamais oublier un produit au fond du tiroir.
+- **👨‍👩‍👧‍👦 Partage Familial (Cloud Sync)** : Synchronisation automatique entre plusieurs utilisateurs via **Supabase**. Partagez simplement votre code de groupe.
+- **🌗 Personnalisation Totale** : Support du multi-langues (FR/EN) et plusieurs thèmes visuels (Ice, Emerald, Midnight).
 
-## 📱 Installation Mobile (APK)
+## 🛠️ Stack Technique
 
-Grâce à notre pipeline **GitHub Actions**, un fichier APK est automatiquement généré à chaque mise à jour.
+- **Frontend** : [React 19](https://react.dev/) + [Vite 6](https://vitejs.dev/)
+- **Mobile** : [Capacitor 8](https://capacitorjs.com/) (Native Android/iOS)
+- **Base de données/Sync** : [Supabase](https://supabase.com/) (PostgreSQL + Real-time channels)
+- **Animations** : [Framer Motion](https://www.framer.com/motion/)
+- **Icônes** : [Lucide React](https://lucide.dev/)
 
-1. Allez sur l'onglet **Actions** de ce dépôt.
-2. Cliquez sur le dernier processus terminé avec succès nommé **"Build Android APK"**.
-3. En bas de la page, dans la section **Artifacts**, téléchargez le fichier `MyFryz-Android-Debug`.
-4. Transférez-le sur votre téléphone et installez-le (autorisez les sources inconnues si nécessaire).
+## 📱 Utilisation Mobile (Android)
 
-## 🚀 Développement Local
+L'application est optimisée pour Android. Un nouveau fichier APK est généré automatiquement via GitHub Actions à chaque mise à jour.
+
+1. Allez dans l'onglet **Actions** de ce dépôt.
+2. Téléchargez l'artefact `MyFryz-Android-Debug` du build le plus récent.
+3. Installez le fichier APK sur votre appareil (autorisez les sources inconnues).
+
+## 💻 Installation & Développement Local
+
+Pour lancer le projet en local sur votre machine :
 
 ```bash
+# Installation des dépendances
 npm install
+
+# Lancement du serveur de développement
 npm run dev
 ```
+
+### Configuration Supabase (Optionnel)
+Pour activer la synchronisation cloud, rendez-vous dans les paramètres (icône Menu → Cloud) et entrez vos propres identifiants Supabase (URL et Clé Anon).
