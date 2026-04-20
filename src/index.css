@@ -49,6 +49,10 @@ body {
   transition: background 0.5s ease;
 }
 
+html.font-sm { font-size: 14px; }
+html.font-md { font-size: 16px; }
+html.font-lg { font-size: 18px; }
+
 body {
   margin: 0;
   min-width: 320px;
@@ -708,6 +712,7 @@ button:active {
 .section-title { display: flex; align-items: center; gap: 8px; color: var(--text-primary); font-weight: 600; margin-bottom: 12px; font-size: 0.95rem; }
 
 .language-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.font-size-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .lang-btn { background: rgba(255,255,255,0.05); color: white; padding: 10px; border-radius: 10px; border: 1px solid transparent; transition: all 0.2s; }
 .lang-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
 

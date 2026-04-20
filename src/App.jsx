@@ -57,6 +57,7 @@ function App() {
   // Customization State
   const [language, setLanguage] = useState(() => localStorage.getItem('myfryz_lang') || 'fr');
   const [theme, setTheme] = useState(() => localStorage.getItem('myfryz_theme') || '');
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem('myfryz_font_size') || 'md');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [isExpirationModalOpen, setIsExpirationModalOpen] = useState(false);
@@ -77,6 +78,14 @@ function App() {
     localStorage.setItem('myfryz_theme', theme);
     document.body.className = theme;
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem('myfryz_font_size', fontSize);
+    document.documentElement.classList.remove('font-sm', 'font-md', 'font-lg');
+    if (fontSize) {
+      document.documentElement.classList.add(`font-${fontSize}`);
+    }
+  }, [fontSize]);
 
   // Handle missing supabase env
   const isCloudEnabled = !!supabase;
@@ -157,6 +166,8 @@ function App() {
         setLanguage={setLanguage}
         theme={theme}
         setTheme={setTheme}
+        fontSize={fontSize}
+        setFontSize={setFontSize}
         t={t}
       />
 

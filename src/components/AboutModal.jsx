@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Globe, Palette, Info, Check } from 'lucide-react';
+import { X, Globe, Palette, Info, Check, Type } from 'lucide-react';
 
-export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setTheme, t }) => {
+export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setTheme, fontSize, setFontSize, t }) => {
   const themes = [
     { id: 'ice', name: 'Ice', color: '#22d3ee', class: '' },
     { id: 'emerald', name: 'Emerald', color: '#10b981', class: 'theme-emerald' },
@@ -81,6 +81,33 @@ export const AboutModal = ({ isOpen, onClose, language, setLanguage, theme, setT
                       <span>{th.name}</span>
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className="settings-section">
+                <div className="section-title">
+                  <Type size={16} />
+                  <span>{t.font_size}</span>
+                </div>
+                <div className="font-size-selector">
+                  <button 
+                    className={`lang-btn ${fontSize === 'sm' ? 'active' : ''}`}
+                    onClick={() => setFontSize('sm')}
+                  >
+                    {t.font_sm}
+                  </button>
+                  <button 
+                    className={`lang-btn ${fontSize === 'md' ? 'active' : ''}`}
+                    onClick={() => setFontSize('md')}
+                  >
+                    {t.font_md}
+                  </button>
+                  <button 
+                    className={`lang-btn ${fontSize === 'lg' ? 'active' : ''}`}
+                    onClick={() => setFontSize('lg')}
+                  >
+                    {t.font_lg}
+                  </button>
                 </div>
               </div>
             </div>
