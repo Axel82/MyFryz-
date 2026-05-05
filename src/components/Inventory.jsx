@@ -113,6 +113,7 @@ export const ItemRow = ({ item, onClick, expirationConfig }) => {
           <div className="title-wrapper">
             {alertLevel === 2 && <Bell size={16} style={{ color: '#ef4444', filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />}
             {alertLevel === 1 && <Bell size={16} style={{ color: '#eab308', filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />}
+            <span className="category-emoji" title={category.name}>{category.emoji}</span>
             <h3>{item.name}</h3>
             {item.weight > 0 && <span className="weight-badge">{item.weight}g</span>}
           </div>

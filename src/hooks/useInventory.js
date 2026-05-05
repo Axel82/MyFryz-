@@ -6,12 +6,12 @@ const DRAWERS_STORAGE_KEY = 'myfryz_drawers';
 const FAMILY_ID_KEY = 'myfryz_family_id';
 
 export const CATEGORIES = [
-  { id: 'viande', name: 'Viande', color: 'var(--cat-viande)' },
-  { id: 'poisson', name: 'Poisson', color: 'var(--cat-poisson)' },
-  { id: 'légumes', name: 'Légumes', color: 'var(--cat-legumes)' },
-  { id: 'plat préparé', name: 'Plat préparé', color: 'var(--cat-plat)' },
-  { id: 'glaces', name: 'Glaces', color: 'var(--cat-glaces)' },
-  { id: 'autres', name: 'Autres', color: 'var(--cat-autres)' },
+  { id: 'viande', name: 'Viande', color: 'var(--cat-viande)', emoji: '🥩' },
+  { id: 'poisson', name: 'Poisson', color: 'var(--cat-poisson)', emoji: '🐟' },
+  { id: 'légumes', name: 'Légumes', color: 'var(--cat-legumes)', emoji: '🥦' },
+  { id: 'plat préparé', name: 'Plat préparé', color: 'var(--cat-plat)', emoji: '🍽️' },
+  { id: 'glaces', name: 'Glaces', color: 'var(--cat-glaces)', emoji: '🍦' },
+  { id: 'autres', name: 'Autres', color: 'var(--cat-autres)', emoji: '📦' },
 ];
 
 // Helper to safely read JSON from localStorage without crashing
