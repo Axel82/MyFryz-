@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from './components/Layout';
-import { InventoryList } from './components/Inventory';
+import { InventoryList, FilterPopup } from './components/Inventory';
 import { AddItemModal } from './components/AddItemModal';
 import { AboutModal } from './components/AboutModal';
 import { ExpirationConfigModal } from './components/ExpirationConfigModal';
@@ -12,8 +12,9 @@ import { useExpirationConfig } from './hooks/useExpirationConfig';
 import { useShoppingList } from './hooks/useShoppingList';
 import { translations } from './i18n';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, WifiOff } from 'lucide-react';
+import { Loader2, WifiOff, Filter, X } from 'lucide-react';
 import { supabase } from './supabase';
+import { CATEGORIES } from './hooks/useInventory';
 
 // --- Error Boundary: catches render errors and shows a friendly screen ---
 class ErrorBoundary extends React.Component {
@@ -64,6 +65,8 @@ function App() {
   const [isSupabaseConfigOpen, setIsSupabaseConfigOpen] = useState(false);
   const [isShoppingListOpen, setIsShoppingListOpen] = useState(false);
   const [isFamilySettingsOpen, setIsFamilySettingsOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [expirationConfig, setExpirationConfig] = useExpirationConfig();
   const { shoppingList, addToList, removeFromList, clearList, loading: shoppingLoading } = useShoppingList(familyId);
 
@@ -100,8 +103,34 @@ function App() {
       t={t}
     >
       <div className="section-header">
-        <h2>{t.stock}</h2>
+        <div className="section-header-top">
+          <h2>{t.stock}</h2>
+          <button
+            className={`filter-fab glass ${activeFilter ? 'active' : ''}`}
+            onClick={() => setIsFilterOpen(true)}
+            title={t.filter}
+            style={{ width: '38px', height: '38px' }}
+          >
+            <Filter size={18} />
+          </button>
+        </div>
         <div className="status-row">
+          {activeFilter && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="filter-active-label"
+            >
+              <span className="filter-active-emoji">{CATEGORIES.find(c => c.id === activeFilter)?.emoji}</span>
+              <span>{CATEGORIES.find(c => c.id === activeFilter)?.name}</span>
+              <button
+                className="filter-clear-btn"
+                onClick={() => setActiveFilter(null)}
+              >
+                <X size={14} />
+              </button>
+            </motion.div>
+          )}
           {familyId && (
             <span className={`cloud-badge ${!isCloudEnabled ? 'offline' : ''}`} onClick={() => !isCloudEnabled && setIsSupabaseConfigOpen(true)}>
               {isCloudEnabled ? 'Cloud Sync ON' : 'Offline Mode (Local only)'}
@@ -115,6 +144,16 @@ function App() {
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        <FilterPopup
+          isOpen={isFilterOpen}
+          onClose={() => setIsFilterOpen(false)}
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          t={t}
+        />
+      </AnimatePresence>
       
       {loading ? (
         <div className="loading-state">
@@ -132,6 +171,7 @@ function App() {
           updateDrawer={updateDrawer}
           expirationConfig={expirationConfig}
           onAddToList={addToList}
+          activeFilter={activeFilter}
           t={t}
         />
       )}

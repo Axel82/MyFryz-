@@ -47,6 +47,10 @@ Pour activer la synchronisation cloud, rendez-vous dans les paramètres (icône 
 
 ## 📋 Changelog
 
+### v1.8.0
+- 🔍 Ajout d'un système de filtrage par catégorie pour retrouver facilement les items.
+- 🎨 Amélioration de l'interface du header avec un bouton filtre discret et efficace.
+
 ### v1.7.0
 - 🏷️ Ajout d'emojis dédiés pour chaque catégorie d'aliments (🥩🐟🥦🍱🍦📦)
 - 🎯 Centrage parfait du bouton d'ajout "+" dans la barre de navigation (passage CSS Grid)

@@ -24,7 +24,7 @@ export const translations = {
     delete: "Supprimer",
     cancel: "Annuler",
     about_text: "MyFryz' est votre compagnon de gestion d'inventaire pour congélateur. Mobile-first et synchronisé dans le cloud.",
-    version: "Version 1.6",
+    version: "Version 1.8",
     family_sharing: "Partage Familial",
     family_sync_desc: "Synchronisez votre congélateur avec vos proches",
     solo_mode: "Mode Solo",
@@ -72,7 +72,10 @@ export const translations = {
     delete_item_prompt: "Que souhaitez-vous faire avec cet élément ?",
     delete_only: "Supprimer",
     delete_and_add: "Supprimer & Ajouter aux courses",
-    clear_list: "Vider la liste"
+    clear_list: "Vider la liste",
+    filter: "Filtrer",
+    filter_all: "Toutes les catégories",
+    filter_title: "Filtrer par catégorie"
   },
   en: {
     stock: "Stock",
@@ -99,7 +102,7 @@ export const translations = {
     delete: "Delete",
     cancel: "Cancel",
     about_text: "MyFryz' is your freezer inventory companion. Mobile-first and cloud-synchronized.",
-    version: "Version 1.6",
+    version: "Version 1.8",
     family_sharing: "Family Sharing",
     family_sync_desc: "Sync your freezer with your loved ones",
     solo_mode: "Solo Mode",
@@ -147,6 +150,9 @@ export const translations = {
     delete_item_prompt: "What do you want to do with this item?",
     delete_only: "Delete",
     delete_and_add: "Delete & Add to Shopping List",
-    clear_list: "Clear list"
+    clear_list: "Clear list",
+    filter: "Filter",
+    filter_all: "All categories",
+    filter_title: "Filter by category"
   }
 };

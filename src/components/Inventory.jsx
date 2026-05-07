@@ -78,6 +78,57 @@ const AddDrawerModal = ({ isOpen, onClose, onAdd, t }) => {
   );
 };
 
+// --- Filter Popup (exported for use in App.jsx) ---
+export const FilterPopup = ({ isOpen, onClose, activeFilter, onFilterChange, t }) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="filter-overlay"
+        onClick={onClose}
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: -10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: -10 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        className="filter-popup glass-dark"
+      >
+        <div className="filter-popup-header">
+          <h3>{t.filter_title}</h3>
+          <button onClick={onClose} className="icon-btn" style={{ width: 32, height: 32 }}>
+            <X size={16} />
+          </button>
+        </div>
+        <div className="filter-chips">
+          <button
+            className={`filter-chip ${activeFilter === null ? 'active' : ''}`}
+            onClick={() => { onFilterChange(null); onClose(); }}
+          >
+            <span className="filter-chip-emoji">🧊</span>
+            <span>{t.filter_all}</span>
+          </button>
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              className={`filter-chip ${activeFilter === cat.id ? 'active' : ''}`}
+              onClick={() => { onFilterChange(cat.id); onClose(); }}
+            >
+              <span className="filter-chip-emoji">{cat.emoji}</span>
+              <span>{t[cat.id.replace('é', 'e').replace(' ', '_')] || cat.name}</span>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+    </>
+  );
+};
+
+
 export const ItemRow = ({ item, onClick, expirationConfig }) => {
   const category = CATEGORIES.find(c => c.id === item.category) || CATEGORIES[CATEGORIES.length - 1];
 
@@ -127,7 +178,7 @@ export const ItemRow = ({ item, onClick, expirationConfig }) => {
   );
 };
 
-export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, onAddToList, t }) => {
+export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, onAddToList, activeFilter, t }) => {
   const [drawerToDelete, setDrawerToDelete] = useState(null);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
@@ -142,12 +193,19 @@ export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, d
     }));
   };
 
-  const groupedItems = items.reduce((acc, item) => {
+  // Apply category filter
+  // Apply category filter (activeFilter comes from parent)
+  const filteredItems = activeFilter
+    ? items.filter(item => item.category === activeFilter)
+    : items;
+
+  const groupedItems = filteredItems.reduce((acc, item) => {
     const drawer = item.location || 'Sans emplacement';
     if (!acc[drawer]) acc[drawer] = [];
     acc[drawer].push(item);
     return acc;
   }, {});
+
 
   const handleDeleteDrawer = (e, drawerName) => {
     e.stopPropagation();
