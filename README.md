@@ -5,14 +5,14 @@ MyFryz' est une application mobile moderne et légère conçue pour simplifier l
 ## 🚀 Fonctionnalités Clés
 
 - **📦 Gestion Multititroirs** : Organisez vos aliments par tiroirs personnalisables pour retrouver vos articles en un clin d'œil.
-- **🏷️ Catégorisation Intelligente** : Des codes couleurs clairs (Viande, Poisson, Légumes, etc.) pour une lecture visuelle immédiate.
+- **🏷️ Catégorisation Intelligente** : Des codes couleurs clairs et des emojis dédiés (🥩 Viande, 🐟 Poisson, 🥦 Légumes, 🍱 Plat préparé, 🍦 Glaces, 📦 Autres) pour une lecture visuelle immédiate.
 - **🔍 Scan de Code-barres** : Intégration de `html5-qrcode` pour ajouter des produits instantanément en scannant leur code-barres.
 - **🛒 Liste de Courses Intégrée** : 
     - Génération automatique : Ajoutez un article à la liste lors de sa suppression du congélateur.
-    - **Nouveau** : Ajout manuel d'articles directement dans la liste via une interface dédiée.
+    - Ajout manuel d'articles directement dans la liste via une interface dédiée.
 - **🔔 Gestion des Dates Limites** : Système d'alertes à deux niveaux (configurable en mois) pour ne plus jamais oublier un produit au fond du tiroir.
 - **👨‍👩‍👧‍👦 Partage Familial (Cloud Sync)** : Synchronisation automatique entre plusieurs utilisateurs via **Supabase**. Partagez simplement votre code de groupe.
-- **🌗 Personnalisation Totale** : Support du multi-langues (FR/EN) et plusieurs thèmes visuels (Ice, Emerald, Midnight).
+- **🌗 Personnalisation Totale** : Support du multi-langues (FR/EN), plusieurs thèmes visuels (Ice, Emerald, Midnight) et taille de police configurable (Petit, Moyen, Grand).
 
 ## 🛠️ Stack Technique
 
@@ -44,3 +44,16 @@ npm run dev
 
 ### Configuration Supabase (Optionnel)
 Pour activer la synchronisation cloud, rendez-vous dans les paramètres (icône Menu → Cloud) et entrez vos propres identifiants Supabase (URL et Clé Anon).
+
+## 📋 Changelog
+
+### v1.7.0
+- 🏷️ Ajout d'emojis dédiés pour chaque catégorie d'aliments (🥩🐟🥦🍱🍦📦)
+- 🎯 Centrage parfait du bouton d'ajout "+" dans la barre de navigation (passage CSS Grid)
+
+### v1.6.0
+- 🔤 Taille de police configurable (Petit, Moyen, Grand)
+
+### v1.5.0
+- 🛒 Ajout manuel d'articles dans la liste de courses
+- 🎨 Nouveaux thèmes visuels
