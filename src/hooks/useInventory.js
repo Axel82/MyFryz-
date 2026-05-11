@@ -10,6 +10,8 @@ export const CATEGORIES = [
   { id: 'poisson', name: 'Poisson', color: 'var(--cat-poisson)', emoji: '🐟' },
   { id: 'légumes', name: 'Légumes', color: 'var(--cat-legumes)', emoji: '🥦' },
   { id: 'plat préparé', name: 'Plat préparé', color: 'var(--cat-plat)', emoji: '🍽️' },
+  { id: 'fromages', name: 'Fromages', color: 'var(--cat-fromages)', emoji: '🧀' },
+  { id: 'pain_pate', name: 'Pain & pâte', color: 'var(--cat-pain)', emoji: '🥖' },
   { id: 'glaces', name: 'Glaces', color: 'var(--cat-glaces)', emoji: '🍦' },
   { id: 'autres', name: 'Autres', color: 'var(--cat-autres)', emoji: '📦' },
 ];

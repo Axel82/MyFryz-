@@ -27,6 +27,16 @@
   --success: #22c55e;
   --grad-1: #1e293b;
   --grad-2: #020617;
+
+  /* Categories */
+  --cat-viande: #ef4444;
+  --cat-poisson: #3b82f6;
+  --cat-legumes: #22c55e;
+  --cat-plat: #f59e0b;
+  --cat-fromages: #fbbf24;
+  --cat-pain: #b45309;
+  --cat-glaces: #a855f7;
+  --cat-autres: #94a3b8;
 }
 
 body.theme-emerald {
@@ -377,27 +387,50 @@ button:active {
 
 .edit-modal-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 10px;
+  margin-top: 24px;
 }
 
-.btn-delete-full {
+.edit-modal-actions button {
+  flex: 1;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.edit-modal-actions .btn-primary {
+  margin: 0;
+  width: auto;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.btn-delete-full {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.2);
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.2s;
 }
 
 .btn-delete-full:hover {
   background: #ef4444;
   color: white;
+}
+
+.btn-list-add {
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+.btn-list-add:hover {
+  background: var(--accent);
+  color: #020617;
 }
 
 .flex-1 { flex: 1; }

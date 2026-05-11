@@ -172,10 +172,18 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
               <div className="edit-modal-actions">
                 <button type="button" onClick={handleDelete} className="btn-delete-full">
                   <Trash2 size={18} />
-                  {t.delete}
+                  <span>{t.delete}</span>
                 </button>
-                <button type="submit" className="btn-primary submit-btn flex-1">
-                  {t.save}
+                <button 
+                  type="button" 
+                  onClick={() => { if (onAddToList) onAddToList(formData.name); onClose(); }} 
+                  className="btn-list-add"
+                >
+                  <ShoppingCart size={18} />
+                  <span>{t.add_to_list}</span>
+                </button>
+                <button type="submit" className="btn-primary submit-btn">
+                  <span>{t.save}</span>
                 </button>
               </div>
             </form>

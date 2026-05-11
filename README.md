@@ -5,11 +5,12 @@ MyFryz' est une application mobile moderne et légère conçue pour simplifier l
 ## 🚀 Fonctionnalités Clés
 
 - **📦 Gestion Multititroirs** : Organisez vos aliments par tiroirs personnalisables pour retrouver vos articles en un clin d'œil.
-- **🏷️ Catégorisation Intelligente** : Des codes couleurs clairs et des emojis dédiés (🥩 Viande, 🐟 Poisson, 🥦 Légumes, 🍱 Plat préparé, 🍦 Glaces, 📦 Autres) pour une lecture visuelle immédiate.
+- **🏷️ Catégorisation Intelligente** : Des codes couleurs clairs et des emojis dédiés (🥩 Viande, 🐟 Poisson, 🥦 Légumes, 🍱 Plat préparé, 🧀 Fromages, 🍞 Pain & pâte, 🍦 Glaces, 📦 Autres) pour une lecture visuelle immédiate.
 - **🔍 Scan de Code-barres** : Intégration de `html5-qrcode` pour ajouter des produits instantanément en scannant leur code-barres.
 - **🛒 Liste de Courses Intégrée** : 
     - Génération automatique : Ajoutez un article à la liste lors de sa suppression du congélateur.
-    - Ajout manuel d'articles directement dans la liste via une interface dédiée.
+    - Ajout direct : Nouveau bouton "Aux courses" dans la fiche produit pour préparer vos achats sans supprimer l'item.
+    - Ajout manuel : Interface dédiée pour saisir n'importe quel article.
 - **🔔 Gestion des Dates Limites** : Système d'alertes à deux niveaux (configurable en mois) pour ne plus jamais oublier un produit au fond du tiroir.
 - **👨‍👩‍👧‍👦 Partage Familial (Cloud Sync)** : Synchronisation automatique entre plusieurs utilisateurs via **Supabase**. Partagez simplement votre code de groupe.
 - **🌗 Personnalisation Totale** : Support du multi-langues (FR/EN), plusieurs thèmes visuels (Ice, Emerald, Midnight) et taille de police configurable (Petit, Moyen, Grand).
@@ -46,6 +47,11 @@ npm run dev
 Pour activer la synchronisation cloud, rendez-vous dans les paramètres (icône Menu → Cloud) et entrez vos propres identifiants Supabase (URL et Clé Anon).
 
 ## 📋 Changelog
+
+### v1.9.0
+- 🧀 Nouvelles catégories : Ajout de "Fromages" et "Pain & pâte" avec emojis et codes couleurs dédiés.
+- 🛒 Ergonomie améliorée : Ajout d'un bouton "Aux courses" direct dans la popup d'édition.
+- 📐 Uniformisation des boutons : Refonte visuelle des actions pour une interface plus équilibrée et professionnelle.
 
 ### v1.8.0
 - 🔍 Ajout d'un système de filtrage par catégorie pour retrouver facilement les items.
