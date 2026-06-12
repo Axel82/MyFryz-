@@ -4,6 +4,7 @@ import { X, Trash2, ShoppingCart, Loader2, Plus } from 'lucide-react';
 
 export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemove, onClear, loading, t }) => {
   const [newItemName, setNewItemName] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -78,14 +79,16 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemo
                     <div 
                       key={item.id} 
                       className="item-row" 
-                      style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}
+                      style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', cursor: 'pointer' }}
+                      onClick={() => setSelectedItem(item)}
                     >
                       <div className="row-content">
                         <div className="title-wrapper">
                           <h3 style={{ margin: 0 }}>{item.name}</h3>
                         </div>
                         <button 
-                          onClick={() => onRemove(item.id)} 
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); onRemove(item.id); }}
                           className="icon-btn" 
                           style={{ background: 'transparent', color: '#ef4444', width: '36px', height: '36px' }}
                         >
@@ -112,6 +115,44 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemo
             )}
           </motion.div>
         </>
+      )}
+
+      {selectedItem && (
+        <AnimatePresence>
+          <> 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="modal-overlay"
+              onClick={() => setSelectedItem(null)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="add-modal glass-dark"
+            >
+              <div className="modal-header">
+                <h2>Barcode</h2>
+                <button onClick={() => setSelectedItem(null)} className="icon-btn"><X size={20} /></button>
+              </div>
+              <div className="modal-content" style={{ padding: '20px' }}>
+                <div className="input-group">
+                  <label>Product</label>
+                  <input type="text" value={selectedItem.name} readOnly disabled style={{ backgroundColor: 'var(--input-bg)', color: 'var(--text-secondary)' }} />
+                </div>
+                {selectedItem.barcode && (
+                  <div className="input-group">
+                    <label>Barcode</label>
+                    <input type="text" value={selectedItem.barcode} readOnly disabled style={{ backgroundColor: 'var(--input-bg)', color: 'var(--text-secondary)' }} />
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        </AnimatePresence>
       )}
     </AnimatePresence>
   );
