@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabase';
 
 const SHOPPING_STORAGE_KEY = 'myfryz_shopping_list';
@@ -18,7 +18,7 @@ export const useShoppingList = (familyId) => {
   const [loading, setLoading] = useState(true);
 
   // --- Cloud fetch ---
-  const fetchCloudData = async () => {
+  const fetchCloudData = useCallback(async () => {
     if (!supabase || !familyId) return;
     try {
       const { data, error } = await supabase
@@ -34,7 +34,7 @@ export const useShoppingList = (familyId) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [familyId]);
 
   // --- Initial load & Real-time ---
   useEffect(() => {
@@ -59,7 +59,7 @@ export const useShoppingList = (familyId) => {
       setShoppingList(safeJsonParse(SHOPPING_STORAGE_KEY, []));
       setLoading(false);
     }
-  }, [familyId]);
+  }, [familyId, fetchCloudData]);
 
   // --- Sync to localStorage when offline ---
   useEffect(() => {
@@ -69,18 +69,21 @@ export const useShoppingList = (familyId) => {
   }, [shoppingList, familyId]);
 
   // --- Actions ---
-  const addToList = async (item) => {
-    if (!item?.name?.trim()) return;
+  const addToList = useCallback(async (itemOrName) => {
+    const name = typeof itemOrName === 'string' ? itemOrName : itemOrName?.name;
+    const barcode = typeof itemOrName === 'string' ? null : itemOrName?.barcode || null;
+
+    if (!name?.trim()) return;
     
     // Check if it already exists locally
-    if (shoppingList.some(i => i.name.toLowerCase() === item.name.toLowerCase())) {
+    if (shoppingList.some(i => i.name.toLowerCase() === name.toLowerCase())) {
         return;
     }
 
     const newItem = { 
         id: crypto.randomUUID(), 
-        name: item.name.trim(),
-        barcode: item.barcode || null,
+        name: name.trim(),
+        barcode: barcode,
         created_at: new Date().toISOString() 
     };
 
@@ -93,7 +96,7 @@ export const useShoppingList = (familyId) => {
       }]);
       if (error) console.error('addToList error:', error.message);
     }
-  };
+  }, [shoppingList, familyId]);
 
   const removeFromList = async (id) => {
     setShoppingList(prev => prev.filter(it => it.id !== id));

@@ -9,9 +9,17 @@ const AddDrawerModal = ({ isOpen, onClose, onAdd, t }) => {
   const [name, setName] = useState('');
   const inputRef = useRef(null);
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setName('');
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
@@ -179,7 +187,7 @@ export const ItemRow = ({ item, onClick, expirationConfig }) => {
 };
 
 export const InventoryList = ({ items, drawers, onUpdate, onDelete, addDrawer, deleteDrawer, updateDrawer, expirationConfig, onAddToList, activeFilter, t }) => {
-  const [drawerToDelete, setDrawerToDelete] = useState(null);
+
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [collapsedDrawers, setCollapsedDrawers] = useState({});
   const [editingDrawerId, setEditingDrawerId] = useState(null);

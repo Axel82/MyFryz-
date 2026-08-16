@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { CATEGORIES } from '../hooks/useInventory';
@@ -15,7 +15,12 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
     barcode: ''
   });
 
-  useEffect(() => {
+  const [prevItem, setPrevItem] = useState(null);
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+
+  if (item !== prevItem || isOpen !== prevIsOpen) {
+    setPrevItem(item);
+    setPrevIsOpen(isOpen);
     if (item && isOpen) {
       setIsConfirmingDelete(false);
       setFormData({
@@ -28,7 +33,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
         barcode: item.barcode || ''
       });
     }
-  }, [item, isOpen]);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,7 +53,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
 
   const confirmDeleteAndAdd = () => {
     onDelete(item.id);
-    if (onAddToList) onAddToList(formData.name);
+    if (onAddToList) onAddToList(formData);
     setIsConfirmingDelete(false);
     onClose();
   };
@@ -185,7 +190,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                 </button>
                 <button 
                   type="button" 
-                  onClick={() => { if (onAddToList) onAddToList(formData.name); onClose(); }} 
+                  onClick={() => { if (onAddToList) onAddToList(formData); onClose(); }} 
                   className="btn-list-add"
                 >
                   <ShoppingCart size={18} />

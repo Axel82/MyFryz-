@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Trash2, ShoppingCart, Loader2, Plus } from 'lucide-react';
+import { X, Trash2, ShoppingCart, Loader2, Plus, Eye } from 'lucide-react';
 
 export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemove, onClear, loading, t }) => {
   const [newItemName, setNewItemName] = useState('');
@@ -79,21 +79,33 @@ export const ShoppingListModal = ({ isOpen, onClose, shoppingList, onAdd, onRemo
                     <div 
                       key={item.id} 
                       className="item-row" 
-                      style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', cursor: 'pointer' }}
-                      onClick={() => setSelectedItem(item)}
+                      style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}
                     >
                       <div className="row-content">
                         <div className="title-wrapper">
                           <h3 style={{ margin: 0 }}>{item.name}</h3>
                         </div>
-                        <button 
-                          type="button"
-                          onClick={(e) => { e.stopPropagation(); onRemove(item.id); }}
-                          className="icon-btn" 
-                          style={{ background: 'transparent', color: '#ef4444', width: '36px', height: '36px' }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          {item.barcode && (
+                            <button 
+                              type="button"
+                              onClick={() => setSelectedItem(item)}
+                              className="icon-btn" 
+                              style={{ background: 'transparent', color: 'var(--accent, #6366f1)', width: '36px', height: '36px' }}
+                              title="View Barcode"
+                            >
+                              <Eye size={16} />
+                            </button>
+                          )}
+                          <button 
+                            type="button"
+                            onClick={() => onRemove(item.id)}
+                            className="icon-btn" 
+                            style={{ background: 'transparent', color: '#ef4444', width: '36px', height: '36px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}

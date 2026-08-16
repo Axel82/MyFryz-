@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabase';
 
 const LOCAL_STORAGE_KEY = 'myfryz_inventory';
@@ -34,7 +34,7 @@ export const useInventory = () => {
   const [syncError, setSyncError] = useState(null);
 
   // --- Cloud fetch ---
-  const fetchCloudData = async () => {
+  const fetchCloudData = useCallback(async () => {
     if (!supabase) return;
     setLoading(true);
     setSyncError(null);
@@ -55,7 +55,7 @@ export const useInventory = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [familyId]);
 
   // --- Initial load ---
   useEffect(() => {
@@ -80,7 +80,7 @@ export const useInventory = () => {
       setDrawers(safeJsonParse(DRAWERS_STORAGE_KEY, [{ name: 'Tiroir 1', id: 'default' }]));
       setLoading(false);
     }
-  }, [familyId]);
+  }, [familyId, fetchCloudData]);
 
   // --- Sync to localStorage when offline ---
   useEffect(() => {

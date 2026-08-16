@@ -9,6 +9,23 @@ const Scanner = ({ onScan, onClose }) => {
   const isStoppingRef = React.useRef(false);
   const [scannerError, setScannerError] = useState(null);
 
+  const handleStop = React.useCallback(async () => {
+    if (isStoppingRef.current) return;
+    isStoppingRef.current = true;
+
+    if (scannerRef.current) {
+      try {
+        if (scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        await scannerRef.current.clear();
+      } catch (err) {
+        console.error("Stop error:", err);
+      }
+    }
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader");
     scannerRef.current = html5QrCode;
@@ -50,24 +67,7 @@ const Scanner = ({ onScan, onClose }) => {
         }
       }
     };
-  }, [onScan]);
-
-  const handleStop = async () => {
-    if (isStoppingRef.current) return;
-    isStoppingRef.current = true;
-
-    if (scannerRef.current) {
-      try {
-        if (scannerRef.current.isScanning) {
-          await scannerRef.current.stop();
-        }
-        await scannerRef.current.clear();
-      } catch (err) {
-        console.error("Stop error:", err);
-      }
-    }
-    onClose();
-  };
+  }, [onScan, handleStop]);
 
   return (
     <div className="scanner-container">
@@ -108,6 +108,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
 
   const handleScan = async (barcode) => {
     setIsLoading(true);
+    setError('');
     const suggestions = await getItemSuggestions(barcode);
     if (suggestions) {
       setFormData({ ...formData, name: suggestions.name, barcode });
@@ -144,6 +145,12 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
             </div>
 
             <form onSubmit={handleSubmit} className="add-form">
+              {error && (
+                <div style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', fontSize: '0.9rem' }}>
+                  <AlertCircle size={16} />
+                  <span>{error}</span>
+                </div>
+              )}
               <div className="input-group">
                 <label>{t.product_name}</label>
                 <div className="scan-wrapper">
@@ -154,8 +161,8 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                     required
                   />
-                  <button type="button" onClick={() => setIsScanning(true)} className="icon-btn scan-btn">
-                    <ScanBarcode size={20} />
+                  <button type="button" onClick={() => setIsScanning(true)} className="icon-btn scan-btn" disabled={isLoading}>
+                    {isLoading ? <Loader2 size={20} className="animate-spin" /> : <ScanBarcode size={20} />}
                   </button>
                 </div>
               </div>

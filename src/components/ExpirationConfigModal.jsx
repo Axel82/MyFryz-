@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CalendarClock } from 'lucide-react';
-import { useExpirationConfig } from '../hooks/useExpirationConfig';
 
 export const ExpirationConfigModal = ({ isOpen, onClose, config, setConfig, t }) => {
   const handleToggle = () => {

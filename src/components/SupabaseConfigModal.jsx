@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Database, CheckCircle2, XCircle, Loader2, ExternalLink, Trash2 } from 'lucide-react';
 import { getSupabaseConfig, saveSupabaseConfig, clearSupabaseConfig, testSupabaseConnection } from '../supabase';
@@ -10,14 +10,17 @@ export const SupabaseConfigModal = ({ isOpen, onClose, t }) => {
   const [testResult, setTestResult] = useState(null); // null | { ok, message }
   const hasExisting = !!getSupabaseConfig().url;
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       const cfg = getSupabaseConfig();
       setUrl(cfg.url || '');
       setKey(cfg.key || '');
       setTestResult(null);
     }
-  }, [isOpen]);
+  }
 
   const handleTest = async () => {
     if (!url.trim() || !key.trim()) return;
