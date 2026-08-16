@@ -92,7 +92,7 @@ export const useShoppingList = (familyId) => {
       }]);
       if (error) console.error('addToList error:', error.message);
     }
-  }, [shoppingList, familyId]);
+  };
 
   const removeFromList = async (id) => {
     setShoppingList(prev => prev.filter(it => it.id !== id));
