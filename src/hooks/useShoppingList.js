@@ -69,21 +69,17 @@ export const useShoppingList = (familyId) => {
   }, [shoppingList, familyId]);
 
   // --- Actions ---
-  const addToList = useCallback(async (itemOrName) => {
-    const name = typeof itemOrName === 'string' ? itemOrName : itemOrName?.name;
-    const barcode = typeof itemOrName === 'string' ? null : itemOrName?.barcode || null;
-
+  const addToList = async (name) => {
     if (!name?.trim()) return;
     
     // Check if it already exists locally
-    if (shoppingList.some(i => i.name.toLowerCase() === name.toLowerCase())) {
+    if (shoppingList.some(item => item.name.toLowerCase() === name.toLowerCase())) {
         return;
     }
 
     const newItem = { 
         id: crypto.randomUUID(), 
         name: name.trim(),
-        barcode: barcode,
         created_at: new Date().toISOString() 
     };
 

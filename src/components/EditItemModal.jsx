@@ -11,8 +11,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
     location: '',
     quantity: 1,
     weight: 0,
-    item_date: new Date().toISOString().split('T')[0],
-    barcode: ''
+    item_date: new Date().toISOString().split('T')[0]
   });
 
   const [prevItem, setPrevItem] = useState(null);
@@ -29,8 +28,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
         location: item.location || '',
         quantity: item.quantity || 1,
         weight: item.weight || 0,
-        item_date: item.item_date || new Date().toISOString().split('T')[0],
-        barcode: item.barcode || ''
+        item_date: item.item_date || new Date().toISOString().split('T')[0]
       });
     }
   }
@@ -144,13 +142,6 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                     {drawers.map(dr => <option key={dr.id || dr.name} value={dr.name}>{dr.name}</option>)}
                   </select>
                 </div>
-                {/* Barcode display (read‑only) */}
-                {formData.barcode && (
-                  <div className="input-group">
-                    <label>Barcode</label>
-                    <input type="text" value={formData.barcode} readOnly disabled style={{ backgroundColor: 'var(--input-bg)', color: 'var(--text-secondary)' }} />
-                  </div>
-                )}
               </div>
 
               {expirationEnabled && (

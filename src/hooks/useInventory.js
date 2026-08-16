@@ -199,7 +199,7 @@ export const useInventory = () => {
       const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`);
       if (!response.ok) return null;
       const data = await response.json();
-      if (data.status === 1) return { name: data.product.product_name || '', brand: data.product.brands || '', barcode: data.code || barcode };
+      if (data.status === 1) return { name: data.product.product_name || '', brand: data.product.brands || '' };
       return null;
     } catch {
       return null;

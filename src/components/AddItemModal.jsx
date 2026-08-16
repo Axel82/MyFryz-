@@ -93,13 +93,12 @@ const Scanner = ({ onScan, onClose }) => {
 };
 
 export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers, expirationEnabled, t }) => {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     category: 'autres',
     location: '',
     quantity: 1,
     weight: 0,
-    barcode: '',
     item_date: new Date().toISOString().split('T')[0]
   });
   const [isScanning, setIsScanning] = useState(false);
@@ -111,7 +110,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     setError('');
     const suggestions = await getItemSuggestions(barcode);
     if (suggestions) {
-      setFormData({ ...formData, name: suggestions.name, barcode });
+      setFormData({ ...formData, name: suggestions.name });
       setIsScanning(false);
     } else {
       setError('Produit non trouvé');
@@ -123,7 +122,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     e.preventDefault();
     if (!formData.name || !formData.location) return;
     onAdd(formData);
-    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0, barcode: '', item_date: new Date().toISOString().split('T')[0] });
+    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0, item_date: new Date().toISOString().split('T')[0] });
     onClose();
   };
 
