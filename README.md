@@ -48,6 +48,10 @@ Pour activer la synchronisation cloud, rendez-vous dans les paramètres (icône 
 
 ## 📋 Changelog
 
+### v1.10.0
+- 👁️ Visualisation des codes-barres : Possibilité d'afficher le code-barres directement depuis la liste de courses.
+- 🛠️ Fix : Résolution d'un bug empêchant d'ajouter un produit à la liste de courses depuis sa fiche d'édition.
+
 ### v1.9.0
 - 🧀 Nouvelles catégories : Ajout de "Fromages" et "Pain & pâte" avec emojis et codes couleurs dédiés.
 - 🛒 Ergonomie améliorée : Ajout d'un bouton "Aux courses" direct dans la popup d'édition.
