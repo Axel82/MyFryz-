@@ -69,7 +69,10 @@ export const useShoppingList = (familyId) => {
   }, [shoppingList, familyId]);
 
   // --- Actions ---
-  const addToList = async (name) => {
+  const addToList = async (itemOrName) => {
+    const name = typeof itemOrName === 'string' ? itemOrName : itemOrName?.name;
+    const barcode = typeof itemOrName === 'string' ? null : itemOrName?.barcode || null;
+
     if (!name?.trim()) return;
     
     // Check if it already exists locally
@@ -80,6 +83,7 @@ export const useShoppingList = (familyId) => {
     const newItem = { 
         id: crypto.randomUUID(), 
         name: name.trim(),
+        barcode: barcode,
         created_at: new Date().toISOString() 
     };
 
