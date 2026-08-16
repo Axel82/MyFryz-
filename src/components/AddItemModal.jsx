@@ -95,6 +95,7 @@ const Scanner = ({ onScan, onClose }) => {
 export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawers, expirationEnabled, t }) => {
   const [formData, setFormData] = useState({
     name: '',
+    barcode: null,
     category: 'autres',
     location: '',
     quantity: 1,
@@ -110,10 +111,13 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     setError('');
     const suggestions = await getItemSuggestions(barcode);
     if (suggestions) {
-      setFormData({ ...formData, name: suggestions.name });
+      setFormData(prev => ({ ...prev, name: suggestions.name, barcode }));
       setIsScanning(false);
     } else {
-      setError('Produit non trouvé');
+      // Produit non trouvé dans OpenFoodFacts : on garde quand même le barcode
+      setFormData(prev => ({ ...prev, barcode }));
+      setError('Produit non trouvé. Vous pouvez saisir le nom manuellement.');
+      setIsScanning(false);
     }
     setIsLoading(false);
   };
@@ -122,7 +126,7 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, getItemSuggestions, drawe
     e.preventDefault();
     if (!formData.name || !formData.location) return;
     onAdd(formData);
-    setFormData({ name: '', category: 'autres', location: '', quantity: 1, weight: 0, item_date: new Date().toISOString().split('T')[0] });
+    setFormData({ name: '', barcode: null, category: 'autres', location: '', quantity: 1, weight: 0, item_date: new Date().toISOString().split('T')[0] });
     onClose();
   };
 

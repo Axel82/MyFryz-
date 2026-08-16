@@ -24,6 +24,7 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
       setIsConfirmingDelete(false);
       setFormData({
         name: item.name || '',
+        barcode: item.barcode || null,
         category: item.category || 'autres',
         location: item.location || '',
         quantity: item.quantity || 1,
