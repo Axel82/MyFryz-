@@ -379,8 +379,8 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, onUpdate, items = [], get
                         className="btn-primary duplicate-add-btn"
                         onClick={handleAddToExisting}
                       >
-                        <Layers size={18} />
-                        {t.add_to_existing || "Ajouter à l'existant"}
+                        <Layers size={20} />
+                        <span>{t.add_to_existing || "Ajouter à l'existant"}</span>
                       </button>
 
                       <button
@@ -388,8 +388,8 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, onUpdate, items = [], get
                         className="duplicate-new-btn"
                         onClick={handleCreateNew}
                       >
-                        <Plus size={18} />
-                        {t.create_new_item || "Créer un nouvel article"}
+                        <Plus size={20} />
+                        <span>{t.create_new_item || "Créer un nouvel article"}</span>
                       </button>
 
                       <button
@@ -397,7 +397,8 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, onUpdate, items = [], get
                         className="btn-cancel duplicate-cancel-btn"
                         onClick={handleCancelDuplicate}
                       >
-                        {t.cancel || "Annuler"}
+                        <X size={20} />
+                        <span>{t.cancel || "Annuler"}</span>
                       </button>
                     </div>
                   </motion.div>
