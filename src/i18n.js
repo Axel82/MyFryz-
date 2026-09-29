@@ -78,7 +78,15 @@ export const translations = {
     clear_list: "Vider la liste",
     filter: "Filtrer",
     filter_all: "Toutes les catégories",
-    filter_title: "Filtrer par catégorie"
+    filter_title: "Filtrer par catégorie",
+    duplicate_item_title: "Article déjà existant",
+    duplicate_item_desc: "Un article nommé « {name} » existe déjà dans votre inventaire.",
+    duplicate_location: "Emplacement : {location}",
+    duplicate_current_qty: "Quantité actuelle",
+    duplicate_new_qty: "Nouveau total",
+    duplicate_select_target: "Sélectionnez l'article à modifier :",
+    add_to_existing: "Ajouter à l'existant",
+    create_new_item: "Créer un nouvel article"
   },
   en: {
     stock: "Stock",
@@ -159,6 +167,14 @@ export const translations = {
     clear_list: "Clear list",
     filter: "Filter",
     filter_all: "All categories",
-    filter_title: "Filter by category"
+    filter_title: "Filter by category",
+    duplicate_item_title: "Item already exists",
+    duplicate_item_desc: "An item named \"{name}\" already exists in your inventory.",
+    duplicate_location: "Location: {location}",
+    duplicate_current_qty: "Current quantity",
+    duplicate_new_qty: "New total",
+    duplicate_select_target: "Select the item to modify:",
+    add_to_existing: "Add to existing",
+    create_new_item: "Create new item"
   }
 };

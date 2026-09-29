@@ -193,6 +193,8 @@ function App() {
         isOpen={isAddModalOpen} 
         onClose={() => setIsAddModalOpen(false)}
         onAdd={addItem}
+        onUpdate={updateItem}
+        items={items}
         getItemSuggestions={getItemSuggestions}
         drawers={drawers}
         expirationEnabled={expirationConfig.enabled}
