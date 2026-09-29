@@ -287,9 +287,14 @@ export const AddItemModal = ({ isOpen, onClose, onAdd, onUpdate, items = [], get
                 </div>
               </div>
 
-              <button type="submit" className="btn-primary submit-btn">
-                {t.add_item}
-              </button>
+              <div className="add-modal-actions">
+                <button type="button" className="btn-cancel add-cancel-btn" onClick={handleCloseAll}>
+                  {t.cancel || "Annuler"}
+                </button>
+                <button type="submit" className="btn-primary submit-btn">
+                  {t.add_item}
+                </button>
+              </div>
             </form>
 
             <AnimatePresence>
