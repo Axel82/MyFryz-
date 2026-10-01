@@ -102,14 +102,16 @@ export const EditItemModal = ({ isOpen, onClose, item, onUpdate, onDelete, drawe
                 </button>
                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                   <button 
+                    type="button"
                     onClick={confirmDeleteOnly} 
                     className="btn-delete-full flex-1" 
-                    style={{ margin: 0, padding: '14px' }}
+                    style={{ margin: 0, padding: '14px', borderRadius: '12px' }}
                   >
                     <Trash2 size={18} />
                     {t.delete_only || "Supprimer"}
                   </button>
                   <button 
+                    type="button"
                     onClick={() => setIsConfirmingDelete(false)} 
                     className="btn-cancel flex-1"
                     style={{ padding: '14px', borderRadius: '12px', fontWeight: 600, border: '1px solid rgba(255,255,255,0.1)' }}

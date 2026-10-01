@@ -415,6 +415,13 @@ button:active {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
 
 .btn-delete-full:hover {
@@ -426,6 +433,13 @@ button:active {
   background: rgba(34, 211, 238, 0.1);
   color: var(--accent);
   border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
 
 .btn-list-add:hover {
